@@ -3,173 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Copilot Chat</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23fff' d='M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z'/></svg>">
+<title>Copilot Chat - Premium Ultimate</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23000' d='M8 0a8 8 0 0 0-2.3 15.6c.4.1.55-.18.55-.4 0-.2 0-.74 0-1.45-2.25.5-2.72-.98-2.72-.98-.37-.96-.9-1.21-.9-1.21-.73-.52.06-.51.06-.51.81.06 1.23.84 1.23.84.72 1.26 1.89.9 2.35.68.07-.54.28-.9.5-1.1-1.8-.21-3.7-.91-3.7-4.04 0-.9.32-1.63.84-2.2-.08-.21-.36-1.04.08-2.17 0 0 .69-.23 2.26.84.66-.19 1.37-.29 2.07-.29.7 0 1.41.1 2.07.29 1.57-1.07 2.26-.84 2.26-.84.44 1.13.16 1.96.08 2.17.52.57.84 1.3.84 2.2 0 3.14-1.9 3.83-3.71 4.03.29.26.54.77.54 1.55 0 1.12 0 2.02 0 2.3 0 .22.15.5.55.4A8 8 0 0 0 8 0Z'/></svg>">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
 :root{
-  --bg:#0d1117;--bg-inset:#010409;--bg-subtle:#151b23;--bg-surface:#212830;
-  --border:#21262d;--border-muted:#3d444d;--border-subtle:rgba(255,255,255,.1);
-  --text:#f0f6fc;--text-muted:#9198a1;--text-faint:#656c76;
-  --accent:#1f6feb;--accent-hover:#1158c7;--success:#238636;--copilot:#a371f7;
-  --radius:6px;--radius-lg:12px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans,Helvetica,Arial,sans-serif;
+  --bg:#ffffff;--bg-subtle:#f6f8fa;--bg-inset:#ffffff;--border:#d1d9e0;--border-muted:#d1d9e0b3;
+  --text:#1f2328;--text-muted:#59636e;--text-faint:#818b98;--accent:#0969da;--success:#1a7f37;
+  --copilot:#8250df;--shadow:0 1px 2px rgba(31,35,40,.04),0 3px 12px rgba(31,35,40,.08);
+  --radius:12px;--radius-sm:6px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
 }
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg-subtle:#151b23;--bg-inset:#010409;--border:#3d444d;--border-muted:#3d444db3;--text:#f0f6fc;--text-muted:#9198a1;--text-faint:#656c76;--shadow:0 1px 2px rgba(0,0,0,.2)}
+}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
 button,input,textarea{font-family:var(--font)}
-::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:var(--border-muted);border-radius:10px}::-webkit-scrollbar-track{background:transparent}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+a{color:var(--accent);text-decoration:none}
 
-/* LAYOUT */
-.app{display:flex;height:100vh;width:100vw;background:var(--bg)}
-.sidebar{width:320px;background:var(--bg-inset);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sidebar-header{padding:16px 12px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
-.logo-icon{width:32px;height:32px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:16px}
-.logo small{display:block;font-weight:400;color:var(--text-muted);font-size:11px;margin-top:1px}
-.btn{padding:5px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-surface);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;line-height:20px}
-.btn:hover{background:var(--border);border-color:var(--border-muted)}
-.btn-primary{background:var(--success);color:white;border-color:rgba(255,255,255,.1);font-weight:600}
-.btn-primary:hover{background:#1f7a2f}
-.btn-ghost{background:transparent;border-color:transparent;color:var(--text-muted)}
-.btn-ghost:hover{background:var(--bg-subtle);color:var(--text);border-color:var(--border)}
-.new-chat{margin:12px;padding:0 12px;height:32px;border-radius:var(--radius);background:var(--bg-subtle);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.15s}
-.new-chat:hover{background:var(--bg-surface);border-color:var(--border-muted)}
-.search{margin:0 12px 12px;position:relative}
-.search input{width:100%;padding:5px 12px 5px 28px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px;outline:none;height:30px;transition:.15s}
-.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.3);background:var(--bg-subtle)}
-.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text-faint)}
-.history{flex:1;overflow:auto;padding:0 8px 8px;display:flex;flex-direction:column;gap:2px}
-.group-label{font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em;padding:12px 8px 6px}
-.conv{padding:6px 8px;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:var(--text-muted);transition:.1s;border:1px solid transparent}
-.conv:hover{background:var(--bg-subtle);color:var(--text)}
-.conv.active{background:var(--bg-surface);color:var(--text);border-color:var(--border);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
-.conv .icon{width:20px;height:20px;border-radius:4px;background:var(--bg-surface);border:1px solid var(--border);display:grid;place-items:center;font-size:10px;flex-shrink:0}
-.conv .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.conv .time{font-size:10px;color:var(--text-faint);flex-shrink:0}
-.sidebar-foot{padding:12px;border-top:1px solid var(--border);background:var(--bg-inset)}
-.user{display:flex;align-items:center;gap:8px}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--copilot);display:grid;place-items:center;font-weight:700;font-size:12px;color:white;overflow:hidden}
-.user-avatar img{width:100%;height:100%;object-fit:cover}
-.user-info{flex:1;min-width:0}
-.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-meta{font-size:11px;color:var(--text-faint)}
-.status{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--radius);background:var(--bg-subtle);border:1px solid var(--border);margin-bottom:10px}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(35,134,54,.2)}
+/* HEADER - GitHub style */
+.header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;position:sticky;top:0;z-index:10}
+.header-left{display:flex;align-items:center;gap:8px}
+.icon-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--bg-subtle);display:grid;place-items:center;cursor:pointer;transition:.15s;color:var(--text-muted)}
+.icon-btn:hover{background:var(--bg);border-color:var(--border);color:var(--text)}
+.title-dropdown{padding:0 8px;height:32px;border-radius:6px;border:1px solid transparent;background:transparent;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+.title-dropdown:hover{background:var(--bg-subtle);border-color:var(--border)}
+.header-right{display:flex;align-items:center;gap:8px}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
-.topbar{height:48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);flex-shrink:0}
-.top-left{display:flex;align-items:center;gap:12px}
-.model-picker{position:relative}
-.model-btn{padding:0 10px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-subtle);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;min-width:180px;justify-content:space-between}
-.model-btn:hover{background:var(--bg-surface);border-color:var(--border-muted)}
-.model-dropdown{position:absolute;top:calc(100% + 6px);left:0;width:380px;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.05) inset;padding:6px;z-index:20;display:none;max-height:480px;overflow:auto}
-.model-dropdown.open{display:block;animation:drop .15s ease}
-@keyframes drop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.model-group{padding:6px 8px 4px;font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em}
-.model-opt{padding:8px 10px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;transition:.1s;border:1px solid transparent}
-.model-opt:hover{background:var(--bg-surface);border-color:var(--border)}
-.model-opt.active{background:var(--bg-surface);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.model-opt .micon{width:28px;height:28px;border-radius:6px;background:var(--bg);border:1px solid var(--border);display:grid;place-items:center;font-size:13px;flex-shrink:0;margin-top:1px}
-.model-opt .minfo{flex:1;min-width:0}
-.model-opt .mname{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
-.model-opt .mdesc{font-size:11px;color:var(--text-muted);line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.model-opt .mcheck{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:10px;color:transparent;flex-shrink:0;margin-top:3px}
-.model-opt.active .mcheck{background:var(--accent);border-color:var(--accent);color:white}
-.badge{font-size:10px;padding:1px 6px;border-radius:20px;background:var(--bg);border:1px solid var(--border);font-weight:600;letter-spacing:.02em}
-.badge-new{background:var(--success);color:white;border-color:transparent}
-.badge-preview{background:var(--copilot);color:white;border-color:transparent}
-.badge-luna{background:linear-gradient(90deg,#a371f7,#ff7b72);color:white;border:none}
+/* MAIN LAYOUT */
+.app{display:flex;flex-direction:column;height:100vh}
+.chat-area{flex:1;overflow:auto;display:flex;flex-direction:column}
+.chat-inner{max-width:800px;width:100%;margin:0 auto;padding:0 16px;flex:1;display:flex;flex-direction:column}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 16px 20px;gap:24px;min-height:50vh}
+.copilot-logo{width:48px;height:48px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+.copilot-logo svg{width:28px;height:28px}
 
-/* CHAT */
-.chat{flex:1;overflow:auto;scroll-behavior:smooth}
-.chat-inner{max-width:900px;margin:0 auto;padding:24px 24px 180px;display:flex;flex-direction:column;gap:24px}
-.welcome{margin-top:8vh;display:flex;flex-direction:column;gap:16px}
-.welcome-header{display:flex;align-items:center;gap:12px}
-.welcome-icon{width:40px;height:40px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:18px}
-.welcome h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.02em}
-.welcome p{color:var(--text-muted);font-size:13px;margin:0;max-width:600px;line-height:1.5}
-.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.suggestion{padding:12px 14px;border-radius:10px;background:var(--bg-subtle);border:1px solid var(--border);cursor:pointer;transition:.15s;text-align:left}
-.suggestion:hover{background:var(--bg-surface);border-color:var(--border-muted);transform:translateY(-1px)}
-.suggestion b{font-size:12px;display:block;margin-bottom:2px}
-.suggestion span{font-size:11px;color:var(--text-muted);line-height:1.4}
-.message{display:flex;gap:12px;animation:msgIn .2s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.msg-avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
-.msg-avatar.user{background:var(--bg-surface);border:1px solid var(--border);color:var(--text-muted)}
-.msg-avatar.assistant{background:var(--text);color:var(--bg);font-size:14px}
-.msg-body{flex:1;min-width:0;max-width:100%}
-.msg-header{font-size:12px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.msg-header small{font-weight:400;color:var(--text-faint);font-size:11px}
-.msg-content{font-size:13.5px;line-height:1.6;color:var(--text);word-break:break-word}
+/* INPUT BOX - Exact GitHub Copilot clone */
+.input-container{width:100%;max-width:768px;margin:0 auto;padding:0 16px 16px;position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 85%,transparent);z-index:5}
+.input-box{border:1px solid var(--border);border-radius:12px;background:var(--bg);box-shadow:var(--shadow);overflow:hidden;transition:.15s;position:relative}
+.input-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(9,105,218,.1),var(--shadow)}
+.input-box::before{content:"";position:absolute;inset:0;border-radius:12px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.input-textarea{width:100%;min-height:24px;max-height:200px;resize:none;border:none;outline:none;background:transparent;color:var(--text);font-size:14px;line-height:1.5;padding:16px 16px 0;font-family:var(--font)}
+.input-textarea::placeholder{color:var(--text-faint)}
+.input-toolbar{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 12px;gap:8px}
+.toolbar-left{display:flex;align-items:center;gap:8px}
+.model-select{position:relative}
+.model-btn{padding:0 8px;height:28px;border-radius:20px;border:1px solid var(--border);background:var(--bg-subtle);display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;cursor:pointer;transition:.15s;color:var(--text)}
+.model-btn:hover{background:var(--bg);border-color:var(--border)}
+.model-btn svg{width:16px;height:16px}
+.dropdown{position:absolute;bottom:calc(100% + 8px);left:0;width:320px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:6px;z-index:20;display:none;max-height:400px;overflow:auto}
+.dropdown.open{display:block;animation:dropIn .15s ease}
+@keyframes dropIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.model-opt{padding:8px 10px;border-radius:8px;cursor:pointer;display:flex;gap:8px;align-items:center;transition:.1s}
+.model-opt:hover{background:var(--bg-subtle)}
+.model-opt.active{background:var(--bg-subtle);border:1px solid var(--accent)}
+.balance-btn{padding:0 8px;height:28px;border-radius:20px;border:1px solid var(--border);background:var(--bg-subtle);display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text)}
+.balance-btn:hover{background:var(--bg)}
+.toolbar-right{display:flex;align-items:center;gap:6px}
+.tool-btn{width:28px;height:28px;border-radius:50%;border:1px solid transparent;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text-faint);transition:.15s}
+.tool-btn:hover{background:var(--bg-subtle);color:var(--text);border-color:var(--border)}
+.send-btn{width:28px;height:28px;border-radius:50%;background:var(--text);color:var(--bg);border:none;display:grid;place-items:center;cursor:pointer;transition:.15s}
+.send-btn:hover{opacity:.8;transform:scale(1.05)}
+.send-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;background:var(--bg-subtle);color:var(--text-faint);border:1px solid var(--border)}
+.input-actions{display:flex;align-items:center;gap:6px;padding:0 8px 8px}
+.action-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-subtle);display:grid;place-items:center;cursor:pointer;color:var(--text-muted);transition:.15s}
+.action-btn:hover{background:var(--bg);border-color:var(--border);color:var(--text)}
+
+/* SUGGESTIONS - GitHub style chips */
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:600px;margin:0 auto}
+.chip{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;cursor:pointer;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.chip:hover{background:var(--bg-subtle);border-color:var(--border);transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.chip svg{width:16px;height:16px}
+.chip.has-dropdown{padding-right:6px}
+.chip-dropdown{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;transition:.15s}
+.chip:hover .chip-dropdown{background:var(--bg-subtle)}
+
+/* MESSAGES - GitHub style */
+.messages{flex:1;display:flex;flex-direction:column;gap:0;padding:16px 0}
+.message-group{padding:16px 0;border-bottom:1px solid var(--border);display:flex;gap:12px}
+.message-group:last-child{border-bottom:none}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.msg-avatar.user{background:var(--bg-subtle);border:1px solid var(--border);color:var(--text)}
+.msg-avatar.assistant{background:var(--bg);border:1px solid var(--border);color:var(--text)}
+.msg-body{flex:1;min-width:0}
+.msg-content{font-size:14px;line-height:1.6;color:var(--text)}
 .msg-content p{margin:0 0 12px}
 .msg-content p:last-child{margin:0}
-.msg-content pre{margin:12px 0;background:#151b23;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.msg-content pre code{font-family:var(--mono);font-size:12.5px;line-height:1.6;padding:12px;display:block;overflow:auto}
-.code-header{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg-subtle);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-muted);font-family:var(--mono)}
-.code-header button{padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-surface);color:var(--text);font-size:11px;cursor:pointer}
-.code-header button:hover{background:var(--bg);border-color:var(--border-muted)}
-.msg-actions{margin-top:8px;display:flex;gap:6px;opacity:0;transition:.15s}
-.message:hover .msg-actions{opacity:1}
-.action{padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-subtle);font-size:11px;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:4px}
-.action:hover{background:var(--bg-surface);color:var(--text);border-color:var(--border-muted)}
+.user-bubble{background:var(--bg-subtle);border:1px solid var(--border);border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:85%;margin-left:auto;font-size:14px;line-height:1.5;display:inline-block;float:right;clear:both}
+.assistant-content{max-width:100%}
+.assistant-content pre{margin:12px 0;background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.assistant-content pre code{font-family:var(--mono);font-size:12.5px;line-height:1.6;padding:12px;display:block;overflow:auto}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+.code-header button{padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-subtle);color:var(--text);font-size:11px;cursor:pointer}
+.msg-actions{display:flex;gap:4px;margin-top:12px}
+.action-icon{width:28px;height:28px;border-radius:6px;border:1px solid transparent;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text-faint);transition:.15s}
+.action-icon:hover{background:var(--bg-subtle);color:var(--text);border-color:var(--border)}
+.edit-btn{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--text-faint);opacity:0;transition:.15s}
+.user-bubble-wrapper{position:relative;display:flex;justify-content:flex-end;margin:12px 0}
+.user-bubble-wrapper:hover .edit-btn{opacity:1}
+
+/* FOOTER */
+.footer{text-align:center;padding:16px;font-size:12px;color:var(--text-faint)}
+.footer a{color:var(--text-faint);text-decoration:underline;text-underline-offset:2px}
+
+/* LOGIN - Premium */
+.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:20px;z-index:50;overflow:auto}
+.login-card{width:100%;max-width:420px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow)}
+.login-card h1{font-size:18px;margin:0 0 8px;font-weight:600;display:flex;align-items:center;gap:8px}
+.login-card p{font-size:13px;color:var(--text-muted);line-height:1.5;margin:0 0 16px}
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg-subtle);padding:3px;border-radius:8px;border:1px solid var(--border)}
+.tab{flex:1;padding:7px;border-radius:6px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.1s}
+.tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.1);border:1px solid var(--border)}
+.login-card input{width:100%;padding:7px 12px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-family:var(--mono);outline:none;background:var(--bg);color:var(--text);height:32px}
+.login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(9,105,218,.1)}
+.login-card button{width:100%;margin-top:12px;height:32px;border-radius:6px;background:var(--success);color:white;border:1px solid rgba(255,255,255,.1);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.login-card button:hover{background:#1a7a2e}
+.login-card button.secondary{background:var(--bg-subtle);color:var(--text);border:1px solid var(--border)}
+.err{margin-top:12px;padding:10px 12px;border-radius:6px;background:#ffebe9;border:1px solid #ff818266;color:#cf222e;font-size:12px;display:none;white-space:pre-wrap}
+.ok{margin-top:12px;padding:10px 12px;border-radius:6px;background:#dafbe1;border:1px solid #4ac26b66;color:#1a7f37;font-size:12px;display:none}
+.help{margin-top:14px;font-size:11px;color:var(--text-faint);line-height:1.4;padding:12px;background:var(--bg-subtle);border-radius:8px;border:1px solid var(--border)}
+.device-box{border:1px dashed var(--border);border-radius:8px;padding:16px;margin-top:12px;text-align:center;display:none;background:var(--bg-subtle)}
+.device-code{font-size:24px;font-weight:800;letter-spacing:.15em;font-family:var(--mono);background:var(--bg);border:1px solid var(--border);padding:8px 16px;border-radius:6px;display:inline-block;margin:8px 0}
+.turnstile-wrap{margin-top:16px;display:flex;justify-content:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:100;display:none;animation:toastIn .2s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .thinking{display:flex;gap:4px;align-items:center;padding:8px 0}
 .thinking span{width:5px;height:5px;background:var(--text-faint);border-radius:50%;animation:bounce 1s infinite}
 .thinking span:nth-child(2){animation-delay:.15s}
 .thinking span:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}
-
-/* INPUT - GitHub style */
-.input-area{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 16px;background:linear-gradient(to top,var(--bg) 80%,transparent);z-index:5}
-.input-box{max-width:900px;margin:0 auto;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.1),0 0 0 1px rgba(255,255,255,.02) inset;padding:8px 8px 8px 12px;display:flex;flex-direction:column;gap:8px;transition:.15s}
-.input-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.2),0 1px 2px rgba(0,0,0,.1);background:var(--bg)}
-.input-row{display:flex;align-items:flex-end;gap:8px}
-.input-box textarea{flex:1;resize:none;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;line-height:1.5;max-height:160px;min-height:22px;padding:6px 0;font-family:var(--font)}
-.input-box textarea::placeholder{color:var(--text-faint)}
-.send-btn{width:28px;height:28px;border-radius:6px;background:var(--success);color:white;border:1px solid rgba(255,255,255,.1);display:grid;place-items:center;cursor:pointer;transition:.15s;flex-shrink:0}
-.send-btn:hover{background:#1f7a2f;transform:scale(1.05)}
-.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:var(--bg-surface);color:var(--text-faint);border-color:var(--border)}
-.input-footer{display:flex;justify-content:space-between;align-items:center}
-.input-tools{display:flex;gap:6px;align-items:center}
-.tool{width:26px;height:26px;border-radius:6px;border:1px solid transparent;background:transparent;display:grid;place-items:center;color:var(--text-faint);cursor:pointer;transition:.15s;font-size:13px}
-.tool:hover{background:var(--bg-surface);color:var(--text);border-color:var(--border)}
-.model-hint{font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:6px}
-.model-hint kbd{padding:1px 5px;border-radius:4px;background:var(--bg-surface);border:1px solid var(--border);border-bottom-width:2px;font-family:var(--mono);font-size:10px}
-
-/* LOGIN - GitHub style */
-.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:20px;z-index:30;overflow:auto}
-.login-card{width:100%;max-width:420px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.login-card h1{font-size:18px;margin:0 0 8px;font-weight:600;display:flex;align-items:center;gap:8px}
-.login-card p{font-size:13px;color:var(--text-muted);line-height:1.5;margin:0 0 16px}
-.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg-inset);padding:3px;border-radius:8px;border:1px solid var(--border)}
-.tab{flex:1;padding:7px;border-radius:6px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.1s}
-.tab.active{background:var(--bg-surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.2);border:1px solid var(--border)}
-.login-card input{width:100%;padding:7px 12px;border-radius:6px;border:1px solid var(--border-muted);font-size:13px;font-family:var(--mono);outline:none;background:var(--bg);color:var(--text);height:32px}
-.login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.2)}
-.login-card button{width:100%;margin-top:12px;height:32px;border-radius:6px;background:var(--success);color:white;border:1px solid rgba(255,255,255,.1);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
-.login-card button:hover{background:#1f7a2f}
-.login-card button.secondary{background:var(--bg-surface);color:var(--text);border:1px solid var(--border)}
-.login-card button.secondary:hover{background:var(--border)}
-.err{margin-top:12px;padding:10px 12px;border-radius:6px;background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:#f85149;font-size:12px;display:none;white-space:pre-wrap}
-.ok{margin-top:12px;padding:10px 12px;border-radius:6px;background:rgba(35,134,54,.1);border:1px solid rgba(35,134,54,.3);color:#3fb950;font-size:12px;display:none}
-.help{margin-top:14px;font-size:11px;color:var(--text-faint);line-height:1.4;padding:12px;background:var(--bg-inset);border-radius:8px;border:1px solid var(--border)}
-.device-box{border:1px dashed var(--border-muted);border-radius:8px;padding:16px;margin-top:12px;text-align:center;display:none;background:var(--bg-inset)}
-.device-code{font-size:24px;font-weight:800;letter-spacing:.15em;font-family:var(--mono);background:var(--bg);border:1px solid var(--border);padding:8px 16px;border-radius:6px;display:inline-block;margin:8px 0}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg-surface);color:var(--text);border:1px solid var(--border-muted);padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:100;display:none;animation:toastIn .2s ease}
-@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-@media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:20;transition:.25s;width:84%;max-width:340px}.sidebar.open{transform:translateX(0)}.suggestions{grid-template-columns:1fr}.chat-inner{padding:16px 14px 160px}.topbar{padding:0 12px}.model-dropdown{width:320px;left:-40px}}
+@media(max-width:768px){.chat-inner{padding:0 12px}.input-container{padding:0 12px 12px}.suggestions{padding:0 12px}.header{padding:0 8px}}
 </style>
 </head>
 <body>
 <div id="loginView" class="login">
   <div class="login-card">
-    <h1><span style="width:28px;height:28px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800">C</span> Copilot Chat</h1>
-    <p>GitHub Copilot Chat clone • Direct API • SSE streaming • Device Flow login (like VS Code). Supports GPT-5, Luna, Claude, Gemini.</p>
+    <h1><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 0 0-2.3 15.6c.4.1.55-.18.55-.4 0-.2 0-.74 0-1.45-2.25.5-2.72-.98-2.72-.98-.37-.96-.9-1.21-.9-1.21-.73-.52.06-.51.06-.51.81.06 1.23.84 1.23.84.72 1.26 1.89.9 2.35.68.07-.54.28-.9.5-1.1-1.8-.21-3.7-.91-3.7-4.04 0-.9.32-1.63.84-2.2-.08-.21-.36-1.04.08-2.17 0 0 .69-.23 2.26.84.66-.19 1.37-.29 2.07-.29.7 0 1.41.1 2.07.29 1.57-1.07 2.26-.84 2.26-.84.44 1.13.16 1.96.08 2.17.52.57.84 1.3.84 2.2 0 3.14-1.9 3.83-3.71 4.03.29.26.54.77.54 1.55 0 1.12 0 2.02 0 2.3 0 .22.15.5.55.4A8 8 0 0 0 8 0Z"/></svg> Copilot Chat • Premium Ultimate</h1>
+    <p>GitHub Copilot clone 100% • Cloudflare Turnstile protected • Device Flow login • GPT-5.6 Luna supported • SSE streaming</p>
     <div class="tabs">
       <button class="tab active" id="tabDevice">Device Flow</button>
       <button class="tab" id="tabPat">PAT</button>
@@ -184,101 +158,113 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
       </div>
     </div>
     <div id="patPanel" style="display:none">
-      <input id="patInput" type="password" placeholder="ghu_... or ghp_... or github_pat_...">
-      <button id="connectBtn">Connect with PAT →</button>
+      <input id="patInput" type="password" placeholder="ghu_... or ghp_...">
+      <button id="connectBtn">Connect →</button>
     </div>
+    
+    <div class="turnstile-wrap">
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-callback="onTurnstileSuccess" data-theme="light"></div>
+    </div>
+    <div style="font-size:10px;color:var(--text-faint);text-align:center;margin-top:6px">Protected by Cloudflare Turnstile • Replace sitekey with your own in production</div>
+    
     <div id="errBox" class="err"></div>
     <div id="okBox" class="ok"></div>
     <div class="help">
-      Requires Copilot active at <a href="https://github.com/settings/copilot" target="_blank">github.com/settings/copilot</a> (Free works). Token stored locally only.<br><br>
-      <b>Models:</b> GPT-4o, GPT-5, Luna 5.6, Claude 3.5/3.7, Gemini 2.0, o1/o3. If model not supported, auto fallback to gpt-4o.
+      <b>Turnstile:</b> Set TURNSTILE_SECRET_KEY in Cloudflare Worker env vars for verification. Demo sitekey 1x00000000000000000000AA always passes.<br><br>
+      Requires Copilot active at <a href="https://github.com/settings/copilot" target="_blank">github.com/settings/copilot</a>. Token stored locally only.
     </div>
   </div>
 </div>
 
 <div class="app" id="appView" style="display:none">
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo"><div class="logo-icon">C</div><div><div>Copilot</div><small>Chat • Simple</small></div></div>
-      <div style="display:flex;gap:4px"><button class="btn btn-ghost" id="closeSidebar" style="display:none;padding:4px 8px">✕</button></div>
+  <div class="header">
+    <div class="header-left">
+      <button class="icon-btn" id="menuBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12a.75.75 0 0 1 0-1.5h12.5a.75.75 0 0 1 0 1.5H1.75Z"/></svg></button>
+      <button class="icon-btn" id="newBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"/></svg></button>
+      <button class="title-dropdown" id="titleDropdown"><span id="chatTitle">User greeting and inquiry</span><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
     </div>
-    <button class="new-chat" id="newBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"/></svg> New chat</button>
-    <div class="search"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10.68 11.74a6 6 0 1 1 .88-.88l2.92 2.92a.75.75 0 1 1-1.06 1.06l-2.92-2.92a6 6 0 0 1-.82-.18ZM11 6a5 5 0 1 0-10 0 5 5 0 0 0 10 0Z"/></svg><input id="searchInput" placeholder="Search chats..."></div>
-    <div class="history" id="convList"></div>
-    <div class="sidebar-foot">
-      <div class="status" id="tokenStatus"><span class="dot"></span><span id="tokenText">Copilot token active</span></div>
-      <div class="user"><div class="user-avatar" id="userAvatar">GH</div><div class="user-info"><div class="user-name" id="userName">GitHub User</div><div class="user-meta" id="userMeta">Copilot • Free</div></div><button class="btn btn-ghost" id="logoutBtn" style="padding:4px 8px">↪</button></div>
+    <div class="header-right">
+      <button class="icon-btn" id="modelBtnTop"><span id="modelNameTop">GPT-4o</span><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
+      <button class="icon-btn" id="panelBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25H9.5v-13H1.75ZM10 16v-13h4.25a.25.25 0 0 1 .25.25v12.5a.25.25 0 0 1-.25.25H10Z"/></svg></button>
+      <button class="icon-btn" id="moreBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg></button>
     </div>
   </div>
-  <div class="main">
-    <div class="topbar">
-      <div class="top-left">
-        <button class="btn btn-ghost" id="openSidebar" style="display:none">☰</button>
-        <div class="model-picker">
-          <button class="model-btn" id="modelBtn"><span style="display:flex;align-items:center;gap:6px"><span id="modelIcon">✦</span><span id="modelName">gpt-4o</span></span><span style="opacity:.5">▾</span></button>
-          <div class="model-dropdown" id="modelDrop"></div>
-        </div>
-        <span style="font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block"></span> SSE</span>
-      </div>
-      <div style="display:flex;gap:6px"><button class="btn" id="exportBtn">Export</button><button class="btn" id="clearBtn">Clear</button></div>
-    </div>
-    <div class="chat" id="chatWrap"><div class="chat-inner" id="chatInner"></div></div>
-    <div class="input-area">
-      <div class="input-box" id="inputBox">
-        <div class="input-row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot..."></textarea><button class="send-btn" id="sendBtn" title="Send (Enter)">↑</button></div>
-        <div class="input-footer">
-          <div class="input-tools">
-            <button class="tool" id="attachBtn" title="Attach file">📎</button>
-            <button class="tool" id="voiceBtn" title="Voice">🎙</button>
-            <span style="font-size:11px;color:var(--text-faint)" id="count">~0 tokens</span>
+
+  <div class="chat-area" id="chatWrap">
+    <div class="chat-inner" id="chatInner"></div>
+  </div>
+
+  <div class="input-container">
+    <div class="input-box" id="inputBox">
+      <textarea class="input-textarea" id="msgInput" rows="1" placeholder="Ask anything or type @ to add context"></textarea>
+      <div class="input-toolbar">
+        <div class="toolbar-left">
+          <div class="model-select">
+            <button class="model-btn" id="modelBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z"/></svg><span id="modelName">Auto</span><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
+            <div class="dropdown" id="modelDrop"></div>
           </div>
-          <div class="model-hint"><span id="modelHint">gpt-4o</span><kbd>⌘</kbd><kbd>K</kbd> new</div>
+          <button class="balance-btn" id="balanceBtn">Optimized for: Balance <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
+        </div>
+        <div class="toolbar-right">
+          <button class="tool-btn" id="agentBtn" title="Agent"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z"/></svg></button>
+          <button class="send-btn" id="sendBtn" title="Send">↑</button>
         </div>
       </div>
-      <div style="max-width:900px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--text-faint)">GitHub Copilot Chat clone • Direct API • Auto fallback for unsupported models • Luna 5.6 supported</div>
+      <div class="input-actions">
+        <button class="action-btn" id="chatBtn" title="Chat"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm4.5 2.5a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-2.5A.75.75 0 0 1 5.5 5.25Zm4 0a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 .75-.75ZM1.75 8a.75.75 0 0 1 .75.75v3.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 13.25 14H2.75A1.75 1.75 0 0 1 1 12.25v-3.5A.75.75 0 0 1 1.75 8Z"/></svg></button>
+        <button class="action-btn" id="bookmarkBtn" title="Bookmark"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75A.75.75 0 0 1 .75 1h12.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 1.75ZM0 6a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 6Zm0 5a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 11Z"/></svg></button>
+        <button class="action-btn" id="plusBtn" title="Add"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"/></svg></button>
+      </div>
     </div>
+    <div class="footer"><a href="#">Copilot uses AI. Check for mistakes.</a></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple',oauth:'copilot_oauth_token',models:'copilot_models_cache'};
-let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',models:[],abort:null,streaming:false};
-// Include Luna 5.6 and GPT-5 as requested
+const LS={pat:'copilot_pat_premium',token:'copilot_token_premium',expiry:'copilot_expiry_premium',conv:'copilot_conv_premium',cur:'copilot_cur_premium',model:'copilot_model_premium',oauth:'copilot_oauth_premium',models:'copilot_models_premium',turnstile:'copilot_turnstile'};
+let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',models:[],abort:null,streaming:false,turnstileVerified:localStorage.getItem(LS.turnstile)==='1'};
 const DEFAULT_MODELS=[
-  {id:'gpt-4o', name:'GPT-4o', desc:'Best overall • 128k • Vision', icon:'✦', badge:'RECOMMENDED', group:'OpenAI'},
-  {id:'gpt-4o-mini', name:'GPT-4o mini', desc:'Fast & cheap • 128k', icon:'⚡', badge:'FAST', group:'OpenAI'},
-  {id:'gpt-4.1', name:'GPT-4.1', desc:'Newest OpenAI • Coding king', icon:'◐', badge:'NEW', group:'OpenAI'},
-  {id:'gpt-5', name:'GPT-5', desc:'Next gen • Reasoning', icon:'★', badge:'NEW', group:'OpenAI'},
-  {id:'gpt-5-mini', name:'GPT-5 mini', desc:'GPT-5 fast variant', icon:'☆', badge:'NEW', group:'OpenAI'},
-  {id:'gpt-5.6-luna', name:'GPT-5.6 Luna', desc:'Luna • Creative • 200k', icon:'🌙', badge:'LUNA', group:'OpenAI'},
-  {id:'o1', name:'o1', desc:'Deep reasoning • 200k', icon:'🧠', badge:'REASON', group:'OpenAI'},
-  {id:'o3-mini', name:'o3-mini', desc:'Fast reasoning', icon:'💭', badge:'THINK', group:'OpenAI'},
-  {id:'o4-mini', name:'o4-mini', desc:'Latest mini reasoning', icon:'🔬', badge:'NEW', group:'OpenAI'},
-  {id:'claude-3.5-sonnet', name:'Claude 3.5 Sonnet', desc:'Anthropic • Best code', icon:'♣', badge:'CLAUDE', group:'Anthropic'},
-  {id:'claude-3.7-sonnet', name:'Claude 3.7 Sonnet', desc:'Latest • 200k • Thinking', icon:'♠', badge:'NEW', group:'Anthropic'},
-  {id:'claude-3.7-sonnet-thought', name:'Claude 3.7 Thought', desc:'Extended thinking', icon:'🌀', badge:'THINK', group:'Anthropic'},
-  {id:'gemini-2.0-flash-001', name:'Gemini 2.0 Flash', desc:'Google • 1M context • Fast', icon:'✧', badge:'GOOGLE', group:'Google'},
-  {id:'gemini-2.0-flash-thinking', name:'Gemini 2.0 Thinking', desc:'Google • Reasoning', icon:'✦', badge:'THINK', group:'Google'},
+  {id:'auto', name:'Auto', desc:'Auto select best model', icon:'🤖', group:'Auto'},
+  {id:'gpt-4o', name:'GPT-4o', desc:'Best overall • 128k', icon:'✦', group:'OpenAI'},
+  {id:'gpt-4o-mini', name:'GPT-4o mini', desc:'Fast & cheap', icon:'⚡', group:'OpenAI'},
+  {id:'gpt-4.1', name:'GPT-4.1', desc:'Newest coding king', icon:'◐', group:'OpenAI'},
+  {id:'gpt-5', name:'GPT-5', desc:'Next gen reasoning', icon:'★', group:'OpenAI'},
+  {id:'gpt-5.6-luna', name:'GPT-5.6 Luna', desc:'Luna • Creative • 200k • Premium', icon:'🌙', group:'OpenAI'},
+  {id:'o1', name:'o1', desc:'Deep reasoning', icon:'🧠', group:'OpenAI'},
+  {id:'o3-mini', name:'o3-mini', desc:'Fast reasoning', icon:'💭', group:'OpenAI'},
+  {id:'claude-3.5-sonnet', name:'Claude 3.5 Sonnet', desc:'Best code', icon:'♣', group:'Anthropic'},
+  {id:'claude-3.7-sonnet', name:'Claude 3.7 Sonnet', desc:'Latest 200k', icon:'♠', group:'Anthropic'},
+  {id:'gemini-2.0-flash-001', name:'Gemini 2.0 Flash', desc:'1M context', icon:'✧', group:'Google'},
 ];
 const PROMPTS=[
-  {t:'Explain code',d:'Explain this code in detail',p:'Explain this code in detail, line by line:'},
-  {t:'Fix bug',d:'Find and fix the bug',p:'Find the bug in this code and provide a fix:'},
-  {t:'Write tests',d:'Generate unit tests',p:'Write comprehensive unit tests for:'},
-  {t:'Refactor',d:'Clean and optimize',p:'Refactor this code to be cleaner and more performant:'},
+  {icon:'🐛',t:'Debug',d:'',p:'Debug this code:'},
+  {icon:'☁️',t:'Agent',d:'',p:'Act as an agent to:'},
+  {icon:'◌',t:'Create issue',d:'',p:'Create a GitHub issue for:'},
+  {icon:'📄',t:'Write code',d:'',p:'Write code for:',hasDrop:true},
+  {icon:'⑂',t:'Git',d:'',p:'Help with git:',hasDrop:true},
+  {icon:'⑂',t:'Pull requests',d:'',p:'Help with pull request:',hasDrop:true},
 ];
 const $=s=>document.querySelector(s);
-const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),modelIcon=$('#modelIcon'),searchInput=$('#searchInput'),tokenText=$('#tokenText'),userAvatar=$('#userAvatar'),userName=$('#userName'),userMeta=$('#userMeta'),sidebar=$('#sidebar'),openSidebar=$('#openSidebar'),closeSidebar=$('#closeSidebar'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel'),toast=$('#toast'),countEl=$('#count'),modelHint=$('#modelHint');
+const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),searchInput=$('#searchInput'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel'),toast=$('#toast'),chatTitle=$('#chatTitle'),modelNameTop=$('#modelNameTop');
 
 function showToast(msg){ toast.textContent=msg; toast.style.display='block'; setTimeout(()=>toast.style.display='none',3000); }
+function onTurnstileSuccess(token){
+  state.turnstileVerified=true;
+  localStorage.setItem(LS.turnstile,'1');
+  showToast('Turnstile verified ✓');
+  // Optionally verify with backend
+  fetch('/api/turnstile/verify', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})}).catch(()=>{});
+}
+window.onTurnstileSuccess=onTurnstileSuccess;
+
 function init(){
   if(state.pat) patInput.value=state.pat;
   state.models=JSON.parse(localStorage.getItem(LS.models)||'null')||DEFAULT_MODELS;
   renderModels(); renderList();
-  if(state.oauth||state.pat){ doLoginWithToken(state.oauth||state.pat, true); }
-  checkMobile(); window.addEventListener('resize',checkMobile);
+  if((state.oauth||state.pat) && state.turnstileVerified){ doLoginWithToken(state.oauth||state.pat, true); }
+  else if(state.turnstileVerified && (state.oauth||state.pat)){ doLoginWithToken(state.oauth||state.pat, true); }
 }
-function checkMobile(){const m=innerWidth<=800; openSidebar.style.display=m?'flex':'none'; closeSidebar.style.display=m?'flex':'none'; if(!m) sidebar.classList.remove('open');}
 init();
 
 tabDevice.onclick=()=>{ tabDevice.classList.add('active'); tabPat.classList.remove('active'); devicePanel.style.display='block'; patPanel.style.display='none'; };
@@ -287,12 +273,13 @@ tabPat.onclick=()=>{ tabPat.classList.add('active'); tabDevice.classList.remove(
 function getApi(){
   const host=location.hostname;
   if(host.includes('workers.dev')||host.includes('pages.dev')){
-    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions',models:'/api/models',deviceCode:'/api/device/code',deviceToken:'/api/device/token'};
+    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions',models:'/api/models',deviceCode:'/api/device/code',deviceToken:'/api/device/token',turnstile:'/api/turnstile/verify'};
   }
-  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions',models:'https://api.githubcopilot.com/models',deviceCode:'https://github.com/login/device/code',deviceToken:'https://github.com/login/oauth/access_token'};
+  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions',models:'https://api.githubcopilot.com/models',deviceCode:'https://github.com/login/device/code',deviceToken:'https://github.com/login/oauth/access_token',turnstile:'/api/turnstile/verify'};
 }
 
 deviceBtn.onclick=async()=>{
+  if(!state.turnstileVerified){ errBox.textContent='Vui lòng hoàn thành Turnstile verification trước!'; errBox.style.display='block'; return; }
   errBox.style.display='none'; okBox.style.display='none';
   deviceBtn.textContent='Getting code...'; deviceBtn.disabled=true;
   try{
@@ -334,172 +321,177 @@ async function fetchModels(githubToken){
       if(data.data) models=data.data;
       else if(Array.isArray(data)) models=data;
       if(models.length>0){
-        // Keep Luna and GPT-5 if user says they work, even if not in API list
         const customModels = DEFAULT_MODELS.filter(m=>m.id.includes('luna')||m.id.includes('gpt-5'));
         const apiModels = models.map(m=>({
-          id:m.id||m.model||m.name,
-          name:m.name||m.id,
-          desc:m.description||'Copilot model',
-          icon:m.id?.includes('claude')?'♣':m.id?.includes('gemini')?'✧':m.id?.includes('luna')?'🌙':m.id?.includes('gpt-5')?'★':'✦',
-          badge:'',
-          group:m.id?.includes('claude')?'Anthropic':m.id?.includes('gemini')?'Google':'OpenAI',
-          raw:m
+          id:m.id||m.model||m.name, name:m.name||m.id, desc:m.description||'Copilot model',
+          icon:m.id?.includes('claude')?'♣':m.id?.includes('luna')?'🌙':m.id?.includes('gpt-5')?'★':'✦',
+          group:m.id?.includes('claude')?'Anthropic':m.id?.includes('gemini')?'Google':'OpenAI'
         }));
-        // Merge, keep custom Luna models at top if not already in list
         const existingIds = new Set(apiModels.map(x=>x.id));
-        const merged = [...customModels.filter(c=>!existingIds.has(c.id)), ...apiModels];
-        state.models=merged;
+        state.models=[...customModels.filter(c=>!existingIds.has(c.id)), ...apiModels];
         localStorage.setItem(LS.models, JSON.stringify(state.models));
         renderModels();
-        showToast(`Loaded ${state.models.length} models (including Luna)`);
         return;
       }
     }
-  }catch(e){ console.log('fetch models fail', e); }
-  state.models=DEFAULT_MODELS;
-  renderModels();
+  }catch{}
+  state.models=DEFAULT_MODELS; renderModels();
 }
 
 async function doLoginWithToken(githubToken, silent){
   const api=getApi();
   if(!silent){ connectBtn.textContent='...'; connectBtn.disabled=true; errBox.style.display='none'; okBox.style.display='none'; }
   try{
+    if(!state.turnstileVerified && !silent){
+      // Check turnstile if not verified
+      const tsToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+      if(!tsToken && !localStorage.getItem(LS.turnstile)){
+        throw new Error('Vui lòng hoàn thành Turnstile verification!');
+      }
+    }
     const r=await fetch(api.token,{headers:{Authorization:`token ${githubToken}`}});
     const text=await r.text(); let d; try{ d=JSON.parse(text); }catch{ throw new Error(text.slice(0,500)); }
     if(!r.ok) throw new Error(`${r.status}: ${d.error||d.message||text.slice(0,300)}`);
-    if(!d.token) throw new Error('No token in response');
+    if(!d.token) throw new Error('No token');
     state.copilotToken=d.token; state.expiry=d.expires_at?d.expires_at*1000:Date.now()+25*60*1000;
     if(githubToken.startsWith('ghu_')||githubToken.startsWith('gho_')){ state.oauth=githubToken; localStorage.setItem(LS.oauth, githubToken); }
     else { state.pat=githubToken; localStorage.setItem(LS.pat, githubToken); }
     localStorage.setItem(LS.token,d.token); localStorage.setItem(LS.expiry,String(state.expiry));
-    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userName.textContent=ud.name||ud.login; userMeta.textContent=`@${ud.login} • Copilot`; if(ud.avatar_url) userAvatar.innerHTML=`<img src="${ud.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`; } }catch{}
     loginView.style.display='none'; appView.style.display='flex';
-    tokenText.textContent=`Token • ${Math.floor((state.expiry-Date.now())/60000)}m`;
     if(state.convs.length===0) newChat(); renderList(); renderChat();
     fetchModels(d.token);
-    setInterval(()=>{ tokenText.textContent=`Token • ${Math.max(0,Math.floor((state.expiry-Date.now())/60000))}m`; },10000);
   }catch(e){
     if(!silent){ errBox.textContent='Token fail: '+e.message; errBox.style.display='block'; }
-    console.error(e);
   }
-  finally{ if(!silent){ connectBtn.textContent='Connect with PAT →'; connectBtn.disabled=false; } }
+  finally{ if(!silent){ connectBtn.textContent='Connect →'; connectBtn.disabled=false; } }
 }
-connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Enter PAT'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
-patInput.onkeydown=e=>{ if(e.key==='Enter') connectBtn.click(); };
+connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Enter token'; errBox.style.display='block'; return; } if(!state.turnstileVerified){ errBox.textContent='Complete Turnstile first!'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
 
-function newChat(){ const id=Date.now().toString(36); const c={id,title:'New chat',msgs:[],at:Date.now(),model:state.model}; state.convs.unshift(c); state.curId=id; save(); renderList(); renderChat(); }
+function newChat(){ const id=Date.now().toString(36); const c={id,title:'User greeting and inquiry',msgs:[],at:Date.now(),model:state.model}; state.convs.unshift(c); state.curId=id; save(); renderList(); renderChat(); chatTitle.textContent=c.title; }
 function save(){ localStorage.setItem(LS.conv,JSON.stringify(state.convs)); localStorage.setItem(LS.cur,state.curId); }
 function cur(){ return state.convs.find(x=>x.id===state.curId); }
 function renderList(){
-  const q=(searchInput.value||'').toLowerCase();
   convList.innerHTML='';
-  const groups={}; state.convs.forEach(c=>{ const d=new Date(c.at); const key=d.toDateString()===new Date().toDateString()?'Today':d.toDateString()===new Date(Date.now()-86400000).toDateString()?'Yesterday':'Previous'; (groups[key]=groups[key]||[]).push(c); });
-  Object.entries(groups).filter(([k,v])=>v.some(c=>!q||c.title.toLowerCase().includes(q))).forEach(([label,convs])=>{
-    const gl=document.createElement('div'); gl.className='group-label'; gl.textContent=label; convList.appendChild(gl);
-    convs.filter(c=>!q||c.title.toLowerCase().includes(q)).forEach(c=>{
-      const d=document.createElement('div'); d.className='conv'+(c.id===state.curId?' active':'');
-      d.innerHTML=`<div class="icon">💬</div><div class="title">${esc(c.title)}</div><div class="time">${new Date(c.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>`;
-      d.onclick=()=>{ state.curId=c.id; save(); renderList(); renderChat(); if(innerWidth<=800) sidebar.classList.remove('open'); };
-      convList.appendChild(d);
-    });
+  state.convs.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='conv'+(c.id===state.curId?' active':'');
+    d.innerHTML=`<div class="icon">💬</div><div class="title">${esc(c.title)}</div>`;
+    d.onclick=()=>{ state.curId=c.id; save(); renderList(); renderChat(); chatTitle.textContent=c.title; };
+    convList.appendChild(d);
   });
 }
-searchInput.oninput=renderList;
-newBtn.onclick=newChat;
-openSidebar.onclick=()=>sidebar.classList.add('open');
-closeSidebar.onclick=()=>sidebar.classList.remove('open');
-
 function renderModels(){
   modelDrop.innerHTML='';
   const grouped={};
   state.models.forEach(m=>{ const g=m.group||'Other'; (grouped[g]=grouped[g]||[]).push(m); });
   Object.entries(grouped).forEach(([group,models])=>{
-    const gh=document.createElement('div'); gh.className='model-group'; gh.textContent=group; modelDrop.appendChild(gh);
+    const gh=document.createElement('div'); gh.style.cssText='padding:6px 10px 4px;font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase'; gh.textContent=group; modelDrop.appendChild(gh);
     models.forEach(m=>{
       const d=document.createElement('div'); d.className='model-opt'+(m.id===state.model?' active':'');
-      const badgeClass=m.badge==='LUNA'?'badge-luna':m.badge==='NEW'?'badge-new':m.badge==='RECOMMENDED'?'badge-new':'';
-      d.innerHTML=`<div class="micon">${m.icon||'✦'}</div><div class="minfo"><div class="mname">${esc(m.name||m.id)} ${m.badge?`<span class="badge ${badgeClass}">${m.badge}</span>`:''}</div><div class="mdesc">${esc(m.desc||m.id)}</div></div><div class="mcheck">✓</div>`;
-      d.onclick=()=>{ state.model=m.id; localStorage.setItem(LS.model,m.id); modelName.textContent=m.name||m.id; modelIcon.textContent=m.icon||'✦'; modelHint.textContent=m.id; const cc=cur(); if(cc){ cc.model=m.id; save(); } modelDrop.classList.remove('open'); renderList(); showToast(`Selected ${m.name||m.id}`); };
+      d.innerHTML=`<div style="width:24px;height:24px;border-radius:6px;background:var(--bg-subtle);border:1px solid var(--border);display:grid;place-items:center;font-size:12px">${m.icon||'✦'}</div><div style="flex:1"><div style="font-size:12px;font-weight:600">${esc(m.name||m.id)} ${m.id.includes('luna')?'<span style="background:linear-gradient(90deg,#a371f7,#ff7b72);color:white;padding:1px 6px;border-radius:10px;font-size:9px">LUNA</span>':''}</div><div style="font-size:11px;color:var(--text-muted)">${esc(m.desc||'')}</div></div>`;
+      d.onclick=()=>{ state.model=m.id; localStorage.setItem(LS.model,m.id); modelName.textContent=m.name||m.id; modelNameTop.textContent=m.name||m.id; const cc=cur(); if(cc){ cc.model=m.id; save(); } modelDrop.classList.remove('open'); showToast(`Selected ${m.name||m.id}`); };
       modelDrop.appendChild(d);
     });
   });
   const curM=state.models.find(x=>x.id===state.model)||state.models[0];
-  if(curM){ modelName.textContent=curM.name||curM.id; modelIcon.textContent=curM.icon||'✦'; modelHint.textContent=curM.id; }
+  if(curM){ modelName.textContent=curM.name||curM.id; modelNameTop.textContent=curM.name||curM.id; }
 }
 modelBtn.onclick=()=>modelDrop.classList.toggle('open');
-document.addEventListener('click',e=>{ if(!e.target.closest('.model-picker')) modelDrop.classList.remove('open'); });
+$('#modelBtnTop').onclick=()=>modelDrop.classList.toggle('open');
+document.addEventListener('click',e=>{ if(!e.target.closest('.model-select')&&!e.target.closest('#modelBtnTop')&&!e.target.closest('#modelDrop')) modelDrop.classList.remove('open'); });
 
 function renderChat(){
   const c=cur();
   if(!c){
-    chatInner.innerHTML=`<div class="welcome"><div class="welcome-header"><div class="welcome-icon">C</div><div><h1>Copilot Chat</h1><p>Ask Copilot for code, explanations, fixes, and more. Supports GPT-5, Luna 5.6, Claude, Gemini, o1.</p></div></div><div class="suggestions">${PROMPTS.map(p=>`<button class="suggestion" data-p="${esc(p.p)}"><b>${esc(p.t)}</b><span>${esc(p.d)}</span></button>`).join('')}</div><div style="margin-top:16px;padding:12px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text-muted)"><b style="color:var(--text)">💡 Luna 5.6:</b> Model gpt-5.6-luna đã được thêm vào danh sách. Nếu tài khoản bạn có quyền, chọn Luna để dùng. Nếu không hỗ trợ, hệ thống tự fallback sang gpt-4o.</div></div>`;
-    chatInner.querySelectorAll('.suggestion').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); updateCount(); });
+    chatInner.innerHTML=`
+      <div class="empty-state">
+        <div class="copilot-logo"><svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/><path d="M3 8a5 5 0 0 1 10 0"/><path d="M8 3v2"/><path d="M8 11v2"/><path d="M3.5 5.5l1.5 1.5"/><path d="M11 11l1.5 1.5"/><path d="M12.5 5.5l-1.5 1.5"/><path d="M5 11l-1.5 1.5"/></svg></div>
+        <div class="input-box" style="width:100%;max-width:640px">
+          <textarea class="input-textarea" id="emptyInput" rows="1" placeholder="Ask anything or type @ to add context" style="min-height:48px"></textarea>
+          <div class="input-toolbar">
+            <div class="toolbar-left">
+              <button class="model-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z"/></svg> Auto <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
+              <button class="balance-btn">Optimized for: Balance <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.427 5.427 8 9.002l3.573-3.575a.75.75 0 0 1 1.06 1.06l-4.102 4.1a.75.75 0 0 1-1.06 0L3.367 6.487a.75.75 0 0 1 1.06-1.06Z"/></svg></button>
+            </div>
+            <div class="toolbar-right">
+              <button class="tool-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z"/></svg></button>
+              <button class="send-btn">↑</button>
+            </div>
+          </div>
+          <div class="input-actions">
+            <button class="action-btn">💬</button>
+            <button class="action-btn">📑</button>
+            <button class="action-btn">+</button>
+          </div>
+        </div>
+        <div class="suggestions" style="margin-top:16px">
+          ${PROMPTS.map(p=>`<button class="chip" data-p="${esc(p.p)}"><span>${p.icon}</span> ${p.t} ${p.hasDrop?'<span class="chip-dropdown">▾</span>':''}</button>`).join('')}
+        </div>
+        <div class="footer">Copilot uses AI. Check for mistakes.</div>
+      </div>
+    `;
+    const emptyInput=$('#emptyInput');
+    if(emptyInput){
+      emptyInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); msgInput.value=emptyInput.value; send(); } });
+      emptyInput.addEventListener('input',()=>{ emptyInput.style.height='auto'; emptyInput.style.height=Math.min(emptyInput.scrollHeight,120)+'px'; });
+    }
+    chatInner.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); });
     return;
   }
   chatInner.innerHTML='';
-  c.msgs.forEach((m,i)=>{
-    const div=document.createElement('div'); div.className='message';
+  c.msgs.forEach(m=>{
     const isUser=m.role==='user';
-    div.innerHTML=`<div class="msg-avatar ${isUser?'user':'assistant'}">${isUser?'U':'C'}</div><div class="msg-body"><div class="msg-header">${isUser?'You':'Copilot'} <small>${new Date(m.at||Date.now()).toLocaleTimeString()}${m.modelUsed?` • ${m.modelUsed}`:''}</small></div><div class="msg-content">${md(m.content)}</div><div class="msg-actions"><button class="action" data-copy>⎙ Copy</button><button class="action" data-edit>✎ Edit</button></div></div>`;
-    div.querySelectorAll('pre').forEach(pre=>{
-      const code=pre.querySelector('code'); const lang=(code?.className.match(/language-(\w+)/)||[])[1]||'code';
-      const head=document.createElement('div'); head.className='code-header'; head.innerHTML=`<span>${lang}</span><button>Copy</button>`;
-      pre.prepend(head); head.querySelector('button').onclick=()=>{ navigator.clipboard.writeText(code.textContent); showToast('Copied!'); };
-    });
-    div.querySelector('[data-copy]').onclick=()=>{ navigator.clipboard.writeText(m.content); showToast('Copied!'); };
-    div.querySelector('[data-edit]').onclick=()=>{ if(m.role==='user'){ msgInput.value=m.content; msgInput.focus(); } };
-    chatInner.appendChild(div);
+    if(isUser){
+      const div=document.createElement('div'); div.className='user-bubble-wrapper';
+      div.innerHTML=`<div style="position:relative"><div class="user-bubble">${esc(m.content)}</div><button class="edit-btn">✎</button></div>`;
+      div.querySelector('.edit-btn').onclick=()=>{ msgInput.value=m.content; msgInput.focus(); };
+      chatInner.appendChild(div);
+    } else {
+      const div=document.createElement('div'); div.className='message-group';
+      div.innerHTML=`<div class="msg-avatar assistant"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/><path d="M3 8a5 5 0 0 1 10 0"/></svg></div><div class="msg-body"><div class="msg-content">${md(m.content)}</div><div class="msg-actions"><button class="action-icon">👍</button><button class="action-icon">👎</button><button class="action-icon">⎙</button><button class="action-icon">↻</button><button class="action-icon">↻</button><button class="action-icon">▾</button></div></div>`;
+      div.querySelectorAll('pre').forEach(pre=>{
+        const code=pre.querySelector('code'); const lang=(code?.className.match(/language-(\w+)/)||[])[1]||'';
+        const head=document.createElement('div'); head.className='code-header'; head.innerHTML=`<span>${lang}</span><button>Copy</button>`;
+        pre.prepend(head); head.querySelector('button').onclick=()=>{ navigator.clipboard.writeText(code.textContent); showToast('Copied!'); };
+      });
+      chatInner.appendChild(div);
+    }
   });
-  if(state.streaming){ const d=document.createElement('div'); d.className='message'; d.innerHTML=`<div class="msg-avatar assistant">C</div><div class="msg-body"><div class="msg-header">Copilot <small>thinking...</small></div><div class="thinking"><span></span><span></span><span></span></div></div>`; chatInner.appendChild(d); }
+  if(state.streaming){
+    const d=document.createElement('div'); d.className='message-group';
+    d.innerHTML=`<div class="msg-avatar assistant"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/></svg></div><div class="msg-body"><div class="thinking"><span></span><span></span><span></span></div></div>`;
+    chatInner.appendChild(d);
+  }
   chatWrap.scrollTop=chatWrap.scrollHeight;
   if(window.hljs) document.querySelectorAll('pre code').forEach(b=>{ try{ hljs.highlightElement(b);}catch{} });
 }
 function md(t){ try{ return marked.parse(t||''); }catch{ return esc(t).replace(/\n/g,'<br>'); } }
 function esc(s){ return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function updateCount(){ const l=msgInput.value.length; countEl.textContent=`~${Math.ceil(l/4)} tokens • ${l} chars`; }
+function updateCount(){ const l=msgInput.value.length; $('#count').textContent=`~${Math.ceil(l/4)} tokens`; }
 async function send(){
   const text=msgInput.value.trim(); if(!text||state.streaming) return;
   let c=cur(); if(!c){ newChat(); c=cur(); }
-  c.msgs.push({role:'user',content:text,at:Date.now()}); if(c.msgs.length===1) c.title=text.slice(0,50);
-  msgInput.value=''; updateCount(); autoResize(); save(); renderList(); renderChat();
+  c.msgs.push({role:'user',content:text,at:Date.now()}); if(c.msgs.length===1) c.title=text.slice(0,40);
+  msgInput.value=''; updateCount(); autoResize(); save(); renderList(); renderChat(); chatTitle.textContent=c.title;
   state.streaming=true; renderChat();
   const assistant={role:'assistant',content:'',at:Date.now()}; c.msgs.push(assistant);
-  const ctrl=new AbortController(); state.abort=ctrl; let full=''; let modelUsed=null;
+  const ctrl=new AbortController(); state.abort=ctrl; let full='';
   try{
     const api=getApi();
-    const msgs=[{role:'system',content:'You are GitHub Copilot Chat. You are a helpful AI coding assistant. Be concise, accurate, and helpful. Use markdown, code blocks with language tags. Support all languages, use Vietnamese when user speaks Vietnamese.'}, ...c.msgs.slice(0,-1).slice(-20).map(m=>({role:m.role,content:m.content}))];
+    const msgs=[{role:'system',content:'You are GitHub Copilot Chat. Helpful, concise.'}, ...c.msgs.slice(0,-1).slice(-20).map(m=>({role:m.role,content:m.content}))];
     const r=await fetch(api.chat,{method:'POST',headers:{'Authorization':`Bearer ${state.copilotToken}`,'Content-Type':'application/json','Editor-Version':'vscode/1.99.3','Editor-Plugin-Version':'copilot-chat/0.26.7','Copilot-Integration-Id':'vscode-chat'},body:JSON.stringify({model:c.model||state.model,messages:msgs,stream:true,temperature:0.7}),signal:ctrl.signal});
-    if(!r.ok){
-      const t=await r.text(); let errMsg=t; try{ const j=JSON.parse(t); errMsg=j.error?.message||j.error||t; }catch{}
-      if(t.includes('model_not_supported')||t.includes('not supported')){
-        throw new Error(`Model ${c.model} không hỗ trợ. Đã thử fallback nhưng vẫn lỗi. Hãy chọn gpt-4o, gpt-4o-mini, hoặc gpt-5.6-luna (nếu acc bạn có). Lỗi: ${errMsg}`);
-      }
-      throw new Error(errMsg.slice(0,600));
-    }
-    modelUsed=r.headers.get('X-Model-Used')||c.model;
-    if(modelUsed!==c.model){ showToast(`Fallback: ${c.model} → ${modelUsed}`); assistant.modelUsed=modelUsed; }
+    if(!r.ok){ const t=await r.text(); throw new Error(t.slice(0,600)); }
     const reader=r.body.getReader(); const dec=new TextDecoder(); let buf='';
-    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.message:last-child .msg-content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
-  }catch(e){
-    if(e.name!=='AbortError'){
-      assistant.content=full+`\n\n> ⚠️ **Lỗi:** ${esc(e.message)}\n\n> 💡 **Gợi ý:**\n> - Nếu lỗi model_not_supported, chọn **gpt-4o**, **gpt-4o-mini**, hoặc **gpt-5.6-luna** (Luna bạn nói vẫn dùng được)\n> - Copilot Free thường chỉ hỗ trợ gpt-4o/mini, Pro mới có Claude/Gemini/GPT-5\n> - Thử model khác ở dropdown trên topbar`;
-      if(e.message.includes('model_not_supported')||e.message.includes('không hỗ trợ')){
-        setTimeout(()=>{ state.model='gpt-4o'; localStorage.setItem(LS.model,'gpt-4o'); renderModels(); showToast('Đã chuyển sang gpt-4o'); }, 1000);
-      }
-    }
-  }
+    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.message-group:last-child .msg-content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
+  }catch(e){ if(e.name!=='AbortError') assistant.content=full+`\n\n> ⚠️ ${esc(e.message)}`; }
   finally{ state.streaming=false; state.abort=null; save(); renderChat(); }
 }
 function autoResize(){ msgInput.style.height='auto'; msgInput.style.height=Math.min(msgInput.scrollHeight,160)+'px'; }
 msgInput.addEventListener('input',()=>{ autoResize(); updateCount(); });
-msgInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } });
+msgInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } if(e.key==='@'){ /* TODO: @ context picker */ } });
 $('#sendBtn').onclick=send;
-$('#attachBtn').onclick=()=>{ const input=document.createElement('input'); input.type='file'; input.accept='.txt,.md,.js,.ts,.py,.json,.html,.css'; input.onchange=async()=>{ const f=input.files[0]; if(!f) return; const t=await f.text(); msgInput.value+=`\n\n\`\`\`${f.name.split('.').pop()}\n// ${f.name}\n${t.slice(0,12000)}\n\`\`\`\n`; autoResize(); updateCount(); }; input.click(); };
-$('#voiceBtn').onclick=()=>{ if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){ showToast('Browser không hỗ trợ voice'); return; } const SR=window.SpeechRecognition||window.webkitSpeechRecognition; const rec=new SR(); rec.lang='vi-VN'; rec.onresult=e=>{ msgInput.value+=e.results[0][0].transcript; autoResize(); updateCount(); }; rec.start(); showToast('Listening...'); };
-$('#clearBtn').onclick=()=>{ const c=cur(); if(c&&confirm('Clear chat?')){ c.msgs=[]; save(); renderChat(); } };
-$('#exportBtn').onclick=()=>{ const c=cur(); if(!c) return; const md=`# ${c.title}\n\nModel: ${c.model}\n\n`+c.msgs.map(m=>`## ${m.role}\n\n${m.content}\n`).join('\n---\n\n'); const blob=new Blob([md],{type:'text/markdown'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=c.id+'.md'; a.click(); URL.revokeObjectURL(url); };
-$('#logoutBtn').onclick=()=>{ if(confirm('Logout?')){ localStorage.clear(); location.reload(); } };
-document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); newChat(); } });
+$('#newBtn').onclick=newChat;
+$('#menuBtn').onclick=()=>document.querySelector('.sidebar')?.classList.toggle('open');
 </script>
 </body>
 </html>
