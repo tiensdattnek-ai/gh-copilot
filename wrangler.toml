@@ -4,8 +4,5 @@ compatibility_date = "2024-12-01"
 
 [assets]
 directory = "."
-not_found_handling = "single-page-application"
-
-# Bind assets
-[assets]
 binding = "ASSETS"
+not_found_handling = "single-page-application"
