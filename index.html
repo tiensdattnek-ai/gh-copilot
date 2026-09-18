@@ -1,210 +1,241 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Copilot Chat - Simple Premium</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Copilot Chat</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23fff' d='M8 0a8 8 0 0 0-8 8 8 8 0 0 0 5.47 7.59c.4.08.55-.17.55-.38 0-.27-.01-1.13-.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21.15.45.55.38A7.995 7.995 0 0 0 16 8a8 8 0 0 0-8-8Z'/></svg>">
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
 :root{
-  --bg:#fcfcf9;--bg2:#f5f5f0;--bg3:#eeeee8;--border:#e8e8e0;--border2:#d8d8d0;
-  --text:#11110f;--dim:#6b6b60;--faint:#9a9a90;--accent:#11110f;
-  --radius:14px;--radius-lg:20px;--shadow:0 4px 24px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --shadow-lg:0 12px 40px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.06);
+  --bg:#0d1117;--bg-inset:#010409;--bg-subtle:#151b23;--bg-surface:#212830;
+  --border:#21262d;--border-muted:#3d444d;--border-subtle:rgba(255,255,255,.1);
+  --text:#f0f6fc;--text-muted:#9198a1;--text-faint:#656c76;
+  --accent:#1f6feb;--accent-hover:#1158c7;--success:#238636;--copilot:#a371f7;
+  --radius:6px;--radius-lg:12px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
 }
-@media(prefers-color-scheme:dark){
-  :root{--bg:#0f0f0e;--bg2:#1a1a18;--bg3:#252522;--border:#22221e;--border2:#2e2e28;--text:#f5f5f0;--dim:#9a9a90;--faint:#6b6b60;--accent:#f5f5f0;--shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 12px 40px rgba(0,0,0,.4)}
-}
-*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden;letter-spacing:-.01em}
-button,input,textarea{font-family:inherit}
-::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
-.app{display:flex;height:100vh}
-.sidebar{width:300px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:relative}
-.brand{padding:22px 18px 14px;display:flex;align-items:center;gap:10px}
-.brand-mark{width:32px;height:32px;background:var(--text);color:var(--bg);border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;letter-spacing:-.02em}
-.brand-text b{font-size:14px;font-weight:700;letter-spacing:-.02em;display:block;line-height:1}
-.brand-text small{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600}
-.new-btn{margin:0 12px 14px;padding:12px 14px;border-radius:12px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.new-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15);opacity:.92}
-.search{margin:0 12px 14px;position:relative}
-.search input{width:100%;padding:10px 12px 10px 32px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:13px;outline:none;color:var(--text);transition:.2s}
-.search input:focus{border-color:var(--border2);box-shadow:0 0 0 3px var(--bg3)}
-.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.4}
-.list{flex:1;overflow:auto;padding:0 10px;display:flex;flex-direction:column;gap:3px}
-.item{padding:11px 12px;border-radius:10px;cursor:pointer;transition:.15s;border:1px solid transparent}
-.item:hover{background:var(--bg3);border-color:var(--border)}
-.item.active{background:var(--bg);border-color:var(--border2);box-shadow:var(--shadow)}
-.item .title{font-size:13px;font-weight:500;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item .meta{font-size:11px;color:var(--faint);margin-top:3px;display:flex;gap:6px}
-.foot{padding:14px;border-top:1px solid var(--border);background:var(--bg2)}
-.user-card{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
-.avatar{width:32px;height:32px;border-radius:8px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:12px}
-.status{font-size:11px;padding:8px 10px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);animation:pulse 2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}70%{box-shadow:0 0 0 6px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-.main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
-.top{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(252,252,249,.8);backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}
-@media(prefers-color-scheme:dark){.top{background:rgba(15,15,14,.8)}}
-.model-select{position:relative}
-.model-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s;min-width:200px;justify-content:space-between}
-.model-btn:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-1px)}
-.model-drop{position:absolute;top:calc(100% + 8px);left:0;width:340px;background:var(--bg);border:1px solid var(--border2);border-radius:16px;box-shadow:var(--shadow-lg);padding:6px;z-index:20;display:none;max-height:440px;overflow:auto}
-.model-drop.open{display:block;animation:dropIn .2s ease}
-@keyframes dropIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.mopt{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.15s;border:1px solid transparent}
-.mopt:hover{background:var(--bg2);border-color:var(--border)}
-.mopt.active{background:var(--bg2);border-color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.mopt .name{font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px}
-.mopt .desc{font-size:11px;color:var(--dim);margin-top:2px}
-.badge{font-size:9px;padding:2px 6px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);font-weight:700;letter-spacing:.04em}
-.badge.ok{background:#dcfce7;border-color:#bbf7d0;color:#166534}
-.badge.warn{background:#fef9c3;border-color:#fde68a;color:#854d0e}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased}
+button,input,textarea{font-family:var(--font)}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:var(--border-muted);border-radius:10px}::-webkit-scrollbar-track{background:transparent}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+/* LAYOUT */
+.app{display:flex;height:100vh;width:100vw;background:var(--bg)}
+.sidebar{width:320px;background:var(--bg-inset);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-header{padding:16px 12px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
+.logo-icon{width:32px;height:32px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:16px}
+.logo small{display:block;font-weight:400;color:var(--text-muted);font-size:11px;margin-top:1px}
+.btn{padding:5px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-surface);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;line-height:20px}
+.btn:hover{background:var(--border);border-color:var(--border-muted)}
+.btn-primary{background:var(--success);color:white;border-color:rgba(255,255,255,.1);font-weight:600}
+.btn-primary:hover{background:#1f7a2f}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text-muted)}
+.btn-ghost:hover{background:var(--bg-subtle);color:var(--text);border-color:var(--border)}
+.new-chat{margin:12px;padding:0 12px;height:32px;border-radius:var(--radius);background:var(--bg-subtle);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.15s}
+.new-chat:hover{background:var(--bg-surface);border-color:var(--border-muted)}
+.search{margin:0 12px 12px;position:relative}
+.search input{width:100%;padding:5px 12px 5px 28px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px;outline:none;height:30px;transition:.15s}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.3);background:var(--bg-subtle)}
+.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text-faint)}
+.history{flex:1;overflow:auto;padding:0 8px 8px;display:flex;flex-direction:column;gap:2px}
+.group-label{font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em;padding:12px 8px 6px}
+.conv{padding:6px 8px;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:var(--text-muted);transition:.1s;border:1px solid transparent}
+.conv:hover{background:var(--bg-subtle);color:var(--text)}
+.conv.active{background:var(--bg-surface);color:var(--text);border-color:var(--border);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.conv .icon{width:20px;height:20px;border-radius:4px;background:var(--bg-surface);border:1px solid var(--border);display:grid;place-items:center;font-size:10px;flex-shrink:0}
+.conv .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv .time{font-size:10px;color:var(--text-faint);flex-shrink:0}
+.sidebar-foot{padding:12px;border-top:1px solid var(--border);background:var(--bg-inset)}
+.user{display:flex;align-items:center;gap:8px}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--copilot);display:grid;place-items:center;font-weight:700;font-size:12px;color:white;overflow:hidden}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-meta{font-size:11px;color:var(--text-faint)}
+.status{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--radius);background:var(--bg-subtle);border:1px solid var(--border);margin-bottom:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(35,134,54,.2)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.topbar{height:48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);flex-shrink:0}
+.top-left{display:flex;align-items:center;gap:12px}
+.model-picker{position:relative}
+.model-btn{padding:0 10px;height:28px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-subtle);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;min-width:180px;justify-content:space-between}
+.model-btn:hover{background:var(--bg-surface);border-color:var(--border-muted)}
+.model-dropdown{position:absolute;top:calc(100% + 6px);left:0;width:380px;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.05) inset;padding:6px;z-index:20;display:none;max-height:480px;overflow:auto}
+.model-dropdown.open{display:block;animation:drop .15s ease}
+@keyframes drop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.model-group{padding:6px 8px 4px;font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em}
+.model-opt{padding:8px 10px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;transition:.1s;border:1px solid transparent}
+.model-opt:hover{background:var(--bg-surface);border-color:var(--border)}
+.model-opt.active{background:var(--bg-surface);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.model-opt .micon{width:28px;height:28px;border-radius:6px;background:var(--bg);border:1px solid var(--border);display:grid;place-items:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.model-opt .minfo{flex:1;min-width:0}
+.model-opt .mname{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+.model-opt .mdesc{font-size:11px;color:var(--text-muted);line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.model-opt .mcheck{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:10px;color:transparent;flex-shrink:0;margin-top:3px}
+.model-opt.active .mcheck{background:var(--accent);border-color:var(--accent);color:white}
+.badge{font-size:10px;padding:1px 6px;border-radius:20px;background:var(--bg);border:1px solid var(--border);font-weight:600;letter-spacing:.02em}
+.badge-new{background:var(--success);color:white;border-color:transparent}
+.badge-preview{background:var(--copilot);color:white;border-color:transparent}
+.badge-luna{background:linear-gradient(90deg,#a371f7,#ff7b72);color:white;border:none}
+
+/* CHAT */
 .chat{flex:1;overflow:auto;scroll-behavior:smooth}
-.inner{max-width:760px;margin:0 auto;padding:28px 20px 160px;display:flex;flex-direction:column;gap:28px}
-.empty{margin-top:6vh;text-align:center;animation:fadeIn .5s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.empty-icon{width:56px;height:56px;border-radius:16px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:22px;margin:0 auto 14px}
-.empty h1{font-size:22px;letter-spacing:-.03em;margin:0 0 8px;font-weight:700}
-.empty p{color:var(--dim);font-size:14px;max-width:440px;margin:0 auto 20px;line-height:1.5}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;margin:0 auto;text-align:left}
-.card{padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);cursor:pointer;transition:.2s}
-.card:hover{background:var(--bg);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow)}
-.card b{font-size:13px;display:block;margin-bottom:3px}
-.card span{font-size:12px;color:var(--dim);line-height:1.4}
-.msg{display:flex;gap:14px;animation:msgIn .3s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg-avatar{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-.msg-avatar.user{background:var(--bg3);border:1px solid var(--border);color:var(--dim)}
-.msg-avatar.ai{background:var(--text);color:var(--bg)}
-.msg-body{flex:1;min-width:0}
-.msg-role{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.msg-content{font-size:14.5px;line-height:1.65;color:var(--text)}
+.chat-inner{max-width:900px;margin:0 auto;padding:24px 24px 180px;display:flex;flex-direction:column;gap:24px}
+.welcome{margin-top:8vh;display:flex;flex-direction:column;gap:16px}
+.welcome-header{display:flex;align-items:center;gap:12px}
+.welcome-icon{width:40px;height:40px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:18px}
+.welcome h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.02em}
+.welcome p{color:var(--text-muted);font-size:13px;margin:0;max-width:600px;line-height:1.5}
+.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.suggestion{padding:12px 14px;border-radius:10px;background:var(--bg-subtle);border:1px solid var(--border);cursor:pointer;transition:.15s;text-align:left}
+.suggestion:hover{background:var(--bg-surface);border-color:var(--border-muted);transform:translateY(-1px)}
+.suggestion b{font-size:12px;display:block;margin-bottom:2px}
+.suggestion span{font-size:11px;color:var(--text-muted);line-height:1.4}
+.message{display:flex;gap:12px;animation:msgIn .2s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.msg-avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
+.msg-avatar.user{background:var(--bg-surface);border:1px solid var(--border);color:var(--text-muted)}
+.msg-avatar.assistant{background:var(--text);color:var(--bg);font-size:14px}
+.msg-body{flex:1;min-width:0;max-width:100%}
+.msg-header{font-size:12px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.msg-header small{font-weight:400;color:var(--text-faint);font-size:11px}
+.msg-content{font-size:13.5px;line-height:1.6;color:var(--text);word-break:break-word}
 .msg-content p{margin:0 0 12px}
-.msg-content pre{margin:12px 0;background:#11110f;border-radius:12px;overflow:hidden;border:1px solid #222}
-.msg-content pre code{font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6}
-.code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.06);border-bottom:1px solid #222;font-size:11px;color:#888;font-family:"JetBrains Mono",monospace}
-.code-head button{padding:4px 8px;border-radius:6px;border:1px solid #333;background:rgba(255,255,255,.08);color:#ddd;font-size:11px;cursor:pointer}
-.msg-actions{margin-top:10px;display:flex;gap:6px;opacity:0;transition:.2s}
-.msg:hover .msg-actions{opacity:1}
-.mini{padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s}
-.mini:hover{background:var(--bg3);border-color:var(--border2)}
-.thinking{display:flex;gap:5px;align-items:center;padding:6px 0}
-.thinking span{width:6px;height:6px;background:var(--faint);border-radius:50%;animation:bounce 1.2s infinite}
+.msg-content p:last-child{margin:0}
+.msg-content pre{margin:12px 0;background:#151b23;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.msg-content pre code{font-family:var(--mono);font-size:12.5px;line-height:1.6;padding:12px;display:block;overflow:auto}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg-subtle);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+.code-header button{padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-surface);color:var(--text);font-size:11px;cursor:pointer}
+.code-header button:hover{background:var(--bg);border-color:var(--border-muted)}
+.msg-actions{margin-top:8px;display:flex;gap:6px;opacity:0;transition:.15s}
+.message:hover .msg-actions{opacity:1}
+.action{padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-subtle);font-size:11px;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:4px}
+.action:hover{background:var(--bg-surface);color:var(--text);border-color:var(--border-muted)}
+.thinking{display:flex;gap:4px;align-items:center;padding:8px 0}
+.thinking span{width:5px;height:5px;background:var(--text-faint);border-radius:50%;animation:bounce 1s infinite}
 .thinking span:nth-child(2){animation-delay:.15s}
 .thinking span:nth-child(3){animation-delay:.3s}
-@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
-.input-wrap{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 16px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
-.box{max-width:760px;margin:0 auto;background:var(--bg);border:1px solid var(--border2);border-radius:20px;padding:10px 10px 10px 16px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:8px;transition:.2s}
-.box:focus-within{border-color:var(--text);box-shadow:0 0 0 3px var(--bg3),var(--shadow-lg);transform:translateY(-1px)}
-.row{display:flex;gap:10px;align-items:flex-end}
-.box textarea{flex:1;border:none;outline:none;resize:none;font-size:14.5px;line-height:1.55;max-height:160px;min-height:24px;background:transparent;color:var(--text)}
-.box textarea::placeholder{color:var(--faint)}
-.send{width:36px;height:36px;border-radius:12px;background:var(--text);color:var(--bg);border:none;display:grid;place-items:center;cursor:pointer;transition:.2s;flex-shrink:0}
-.send:hover{transform:scale(1.05)}
-.send:disabled{opacity:.4;transform:none}
-.tools{display:flex;justify-content:space-between;align-items:center}
-.tools-left{display:flex;gap:6px;align-items:center}
-.icon{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);display:grid;place-items:center;cursor:pointer;transition:.15s;color:var(--dim);font-size:13px}
-.icon:hover{background:var(--bg3);color:var(--text);transform:translateY(-1px)}
-.hint{max-width:760px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--faint)}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}
+
+/* INPUT - GitHub style */
+.input-area{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 16px;background:linear-gradient(to top,var(--bg) 80%,transparent);z-index:5}
+.input-box{max-width:900px;margin:0 auto;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.1),0 0 0 1px rgba(255,255,255,.02) inset;padding:8px 8px 8px 12px;display:flex;flex-direction:column;gap:8px;transition:.15s}
+.input-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.2),0 1px 2px rgba(0,0,0,.1);background:var(--bg)}
+.input-row{display:flex;align-items:flex-end;gap:8px}
+.input-box textarea{flex:1;resize:none;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;line-height:1.5;max-height:160px;min-height:22px;padding:6px 0;font-family:var(--font)}
+.input-box textarea::placeholder{color:var(--text-faint)}
+.send-btn{width:28px;height:28px;border-radius:6px;background:var(--success);color:white;border:1px solid rgba(255,255,255,.1);display:grid;place-items:center;cursor:pointer;transition:.15s;flex-shrink:0}
+.send-btn:hover{background:#1f7a2f;transform:scale(1.05)}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:var(--bg-surface);color:var(--text-faint);border-color:var(--border)}
+.input-footer{display:flex;justify-content:space-between;align-items:center}
+.input-tools{display:flex;gap:6px;align-items:center}
+.tool{width:26px;height:26px;border-radius:6px;border:1px solid transparent;background:transparent;display:grid;place-items:center;color:var(--text-faint);cursor:pointer;transition:.15s;font-size:13px}
+.tool:hover{background:var(--bg-surface);color:var(--text);border-color:var(--border)}
+.model-hint{font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:6px}
+.model-hint kbd{padding:1px 5px;border-radius:4px;background:var(--bg-surface);border:1px solid var(--border);border-bottom-width:2px;font-family:var(--mono);font-size:10px}
+
+/* LOGIN - GitHub style */
 .login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:20px;z-index:30;overflow:auto}
-.login-card{width:100%;max-width:440px;border:1px solid var(--border);border-radius:20px;padding:28px;background:var(--bg);box-shadow:var(--shadow-lg);animation:fadeIn .4s ease}
-.login-card h1{font-size:22px;margin:0 0 6px;letter-spacing:-.03em;font-weight:700}
-.login-card p{font-size:13.5px;color:var(--dim);line-height:1.5;margin:0 0 18px}
-.login-card input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border2);font-size:13px;font-family:"JetBrains Mono",monospace;outline:none;background:var(--bg2);color:var(--text);transition:.2s}
-.login-card input:focus{border-color:var(--text);box-shadow:0 0 0 3px var(--bg3)}
-.login-card button{width:100%;margin-top:12px;padding:12px;border-radius:12px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
-.login-card button:hover{transform:translateY(-1px);opacity:.9}
-.login-card button.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
-.login-card button.secondary:hover{background:var(--bg3)}
-.tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--bg2);padding:4px;border-radius:12px;border:1px solid var(--border)}
-.tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--dim);transition:.15s}
-.tab.active{background:var(--bg);color:var(--text);box-shadow:var(--shadow);border:1px solid var(--border2)}
-.err{margin-top:12px;padding:10px 12px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:12px;display:none;white-space:pre-wrap;line-height:1.4}
-.ok{margin-top:12px;padding:10px 12px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:12px;display:none;white-space:pre-wrap}
-.help{margin-top:14px;font-size:11px;color:var(--faint);line-height:1.5;padding:12px;background:var(--bg2);border-radius:10px;border:1px solid var(--border)}
-.device-box{border:1px dashed var(--border2);border-radius:14px;padding:18px;margin-top:14px;text-align:center;display:none;background:var(--bg2)}
-.device-code{font-size:28px;font-weight:800;letter-spacing:.18em;font-family:"JetBrains Mono",monospace;background:var(--bg);border:1px solid var(--border2);padding:10px 18px;border-radius:10px;display:inline-block;margin:10px 0;box-shadow:var(--shadow)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:12px;font-weight:500;box-shadow:var(--shadow-lg);z-index:100;display:none;animation:toastIn .3s ease}
-@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-@media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:15;transition:.3s;width:86%;max-width:340px}.sidebar.open{transform:translateX(0)}.grid{grid-template-columns:1fr}.inner{padding:20px 14px 160px}.box{border-radius:16px}.top{padding:0 12px}}
+.login-card{width:100%;max-width:420px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.login-card h1{font-size:18px;margin:0 0 8px;font-weight:600;display:flex;align-items:center;gap:8px}
+.login-card p{font-size:13px;color:var(--text-muted);line-height:1.5;margin:0 0 16px}
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg-inset);padding:3px;border-radius:8px;border:1px solid var(--border)}
+.tab{flex:1;padding:7px;border-radius:6px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.1s}
+.tab.active{background:var(--bg-surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.2);border:1px solid var(--border)}
+.login-card input{width:100%;padding:7px 12px;border-radius:6px;border:1px solid var(--border-muted);font-size:13px;font-family:var(--mono);outline:none;background:var(--bg);color:var(--text);height:32px}
+.login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,235,.2)}
+.login-card button{width:100%;margin-top:12px;height:32px;border-radius:6px;background:var(--success);color:white;border:1px solid rgba(255,255,255,.1);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.login-card button:hover{background:#1f7a2f}
+.login-card button.secondary{background:var(--bg-surface);color:var(--text);border:1px solid var(--border)}
+.login-card button.secondary:hover{background:var(--border)}
+.err{margin-top:12px;padding:10px 12px;border-radius:6px;background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:#f85149;font-size:12px;display:none;white-space:pre-wrap}
+.ok{margin-top:12px;padding:10px 12px;border-radius:6px;background:rgba(35,134,54,.1);border:1px solid rgba(35,134,54,.3);color:#3fb950;font-size:12px;display:none}
+.help{margin-top:14px;font-size:11px;color:var(--text-faint);line-height:1.4;padding:12px;background:var(--bg-inset);border-radius:8px;border:1px solid var(--border)}
+.device-box{border:1px dashed var(--border-muted);border-radius:8px;padding:16px;margin-top:12px;text-align:center;display:none;background:var(--bg-inset)}
+.device-code{font-size:24px;font-weight:800;letter-spacing:.15em;font-family:var(--mono);background:var(--bg);border:1px solid var(--border);padding:8px 16px;border-radius:6px;display:inline-block;margin:8px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg-surface);color:var(--text);border:1px solid var(--border-muted);padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:100;display:none;animation:toastIn .2s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:20;transition:.25s;width:84%;max-width:340px}.sidebar.open{transform:translateX(0)}.suggestions{grid-template-columns:1fr}.chat-inner{padding:16px 14px 160px}.topbar{padding:0 12px}.model-dropdown{width:320px;left:-40px}}
 </style>
 </head>
 <body>
 <div id="loginView" class="login">
   <div class="login-card">
-    <h1>GitHub Copilot Chat</h1>
-    <p>Simple premium • Private • SSE streaming. Dùng trực tiếp Copilot API. Login bằng OAuth Device Flow (giống VS Code).</p>
+    <h1><span style="width:28px;height:28px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800">C</span> Copilot Chat</h1>
+    <p>GitHub Copilot Chat clone • Direct API • SSE streaming • Device Flow login (like VS Code). Supports GPT-5, Luna, Claude, Gemini.</p>
     <div class="tabs">
-      <button class="tab active" id="tabDevice">🔐 Device Flow</button>
-      <button class="tab" id="tabPat">🔑 PAT</button>
+      <button class="tab active" id="tabDevice">Device Flow</button>
+      <button class="tab" id="tabPat">PAT</button>
     </div>
     <div id="devicePanel">
-      <p style="font-size:12px;color:var(--dim);margin-bottom:12px">PAT (ghp_) đã bị GitHub chặn 404. Device Flow lấy token <code>ghu_</code> - cách duy nhất hoạt động hiện tại.</p>
-      <button id="deviceBtn">Bắt đầu Device Flow →</button>
+      <button id="deviceBtn">Start Device Flow →</button>
       <div class="device-box" id="deviceBox">
-        <div style="font-size:12px;color:var(--dim)">Mở <a href="https://github.com/login/device" target="_blank" style="font-weight:600">github.com/login/device</a> và nhập:</div>
+        <div style="font-size:12px;color:var(--text-muted)">Open <a href="https://github.com/login/device" target="_blank">github.com/login/device</a> and enter:</div>
         <div class="device-code" id="deviceCode">----</div>
-        <div style="font-size:11px;color:var(--faint)" id="deviceStatus">Đang chờ...</div>
-        <div style="margin-top:12px"><a id="deviceLink" href="https://github.com/login/device" target="_blank" style="font-size:12px;font-weight:600">Mở trang xác thực →</a></div>
+        <div style="font-size:11px;color:var(--text-faint)" id="deviceStatus">Waiting...</div>
+        <div style="margin-top:10px"><a id="deviceLink" href="https://github.com/login/device" target="_blank" style="font-size:12px;font-weight:600">Open verification page →</a></div>
       </div>
     </div>
     <div id="patPanel" style="display:none">
-      <input id="patInput" type="password" placeholder="ghp_... hoặc ghu_...">
-      <button id="connectBtn">Connect với PAT →</button>
+      <input id="patInput" type="password" placeholder="ghu_... or ghp_... or github_pat_...">
+      <button id="connectBtn">Connect with PAT →</button>
     </div>
     <div id="errBox" class="err"></div>
     <div id="okBox" class="ok"></div>
     <div class="help">
-      Tài khoản phải có Copilot active tại <a href="https://github.com/settings/copilot" target="_blank" style="font-weight:600">github.com/settings/copilot</a> (Free cũng được).<br>
-      Token chỉ lưu local, không gửi đi đâu khác.
+      Requires Copilot active at <a href="https://github.com/settings/copilot" target="_blank">github.com/settings/copilot</a> (Free works). Token stored locally only.<br><br>
+      <b>Models:</b> GPT-4o, GPT-5, Luna 5.6, Claude 3.5/3.7, Gemini 2.0, o1/o3. If model not supported, auto fallback to gpt-4o.
     </div>
   </div>
 </div>
 
 <div class="app" id="appView" style="display:none">
   <div class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark">C</div><div class="brand-text"><b>Copilot Chat</b><small>Simple Premium • SSE</small></div></div>
-    <button class="new-btn" id="newBtn">✦ New chat</button>
-    <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.3-4.3"/></svg><input id="searchInput" placeholder="Search conversations..."></div>
-    <div class="list" id="convList"></div>
-    <div class="foot">
-      <div class="status" id="tokenStatus"><span class="dot"></span><span id="tokenText">Token active</span></div>
-      <div class="user-card"><div class="avatar" id="userAvatar">GH</div><div style="flex:1;min-width:0"><div id="userName" style="font-size:13px;font-weight:600">GitHub User</div><div id="userMeta" style="font-size:11px;color:var(--faint)">Copilot • Simple</div></div><button class="icon" id="logoutBtn" style="width:28px;height:28px">↪</button></div>
+    <div class="sidebar-header">
+      <div class="logo"><div class="logo-icon">C</div><div><div>Copilot</div><small>Chat • Simple</small></div></div>
+      <div style="display:flex;gap:4px"><button class="btn btn-ghost" id="closeSidebar" style="display:none;padding:4px 8px">✕</button></div>
+    </div>
+    <button class="new-chat" id="newBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"/></svg> New chat</button>
+    <div class="search"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10.68 11.74a6 6 0 1 1 .88-.88l2.92 2.92a.75.75 0 1 1-1.06 1.06l-2.92-2.92a6 6 0 0 1-.82-.18ZM11 6a5 5 0 1 0-10 0 5 5 0 0 0 10 0Z"/></svg><input id="searchInput" placeholder="Search chats..."></div>
+    <div class="history" id="convList"></div>
+    <div class="sidebar-foot">
+      <div class="status" id="tokenStatus"><span class="dot"></span><span id="tokenText">Copilot token active</span></div>
+      <div class="user"><div class="user-avatar" id="userAvatar">GH</div><div class="user-info"><div class="user-name" id="userName">GitHub User</div><div class="user-meta" id="userMeta">Copilot • Free</div></div><button class="btn btn-ghost" id="logoutBtn" style="padding:4px 8px">↪</button></div>
     </div>
   </div>
   <div class="main">
-    <div class="top">
-      <div style="display:flex;gap:10px;align-items:center;position:relative">
-        <button class="icon" id="openBtn" style="display:none">☰</button>
-        <div class="model-select">
-          <button class="model-btn" id="modelBtn"><span style="display:flex;align-items:center;gap:8px"><span id="modelIcon">✦</span><span id="modelName">gpt-4o</span></span><span style="opacity:.5">▾</span></button>
-          <div class="model-drop" id="modelDrop"></div>
+    <div class="topbar">
+      <div class="top-left">
+        <button class="btn btn-ghost" id="openSidebar" style="display:none">☰</button>
+        <div class="model-picker">
+          <button class="model-btn" id="modelBtn"><span style="display:flex;align-items:center;gap:6px"><span id="modelIcon">✦</span><span id="modelName">gpt-4o</span></span><span style="opacity:.5">▾</span></button>
+          <div class="model-dropdown" id="modelDrop"></div>
         </div>
-        <div style="font-size:10px;color:var(--faint);display:flex;align-items:center;gap:4px"><span class="dot"></span> SSE streaming</div>
+        <span style="font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block"></span> SSE</span>
       </div>
-      <div style="display:flex;gap:6px"><button class="mini" id="exportBtn">⤓ Export</button><button class="mini" id="clearBtn">⌫ Clear</button></div>
+      <div style="display:flex;gap:6px"><button class="btn" id="exportBtn">Export</button><button class="btn" id="clearBtn">Clear</button></div>
     </div>
-    <div class="chat" id="chatWrap"><div class="inner" id="chatInner"></div></div>
-    <div class="input-wrap">
-      <div class="box" id="inputBox">
-        <div class="row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot anything... (Shift+Enter for new line)"></textarea><button class="send" id="sendBtn">↑</button></div>
-        <div class="tools">
-          <div class="tools-left">
-            <button class="icon" id="attachBtn" title="Attach file">📎</button>
-            <button class="icon" id="voiceBtn" title="Voice">🎙</button>
-            <span style="font-size:11px;color:var(--faint)" id="count">~0 tokens</span>
+    <div class="chat" id="chatWrap"><div class="chat-inner" id="chatInner"></div></div>
+    <div class="input-area">
+      <div class="input-box" id="inputBox">
+        <div class="input-row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot..."></textarea><button class="send-btn" id="sendBtn" title="Send (Enter)">↑</button></div>
+        <div class="input-footer">
+          <div class="input-tools">
+            <button class="tool" id="attachBtn" title="Attach file">📎</button>
+            <button class="tool" id="voiceBtn" title="Voice">🎙</button>
+            <span style="font-size:11px;color:var(--text-faint)" id="count">~0 tokens</span>
           </div>
-          <div style="display:flex;gap:6px;align-items:center">
-            <span style="font-size:10px;color:var(--faint);background:var(--bg2);padding:3px 8px;border-radius:20px;border:1px solid var(--border)">⌘K new</span>
-            <button class="icon" id="stopBtn" style="display:none;background:#ef4444;color:white;border-color:#ef4444">■</button>
-          </div>
+          <div class="model-hint"><span id="modelHint">gpt-4o</span><kbd>⌘</kbd><kbd>K</kbd> new</div>
         </div>
       </div>
-      <div class="hint">Simple premium • Direct Copilot API • SSE • Markdown • Code highlight • Auto fallback for unsupported models</div>
+      <div style="max-width:900px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--text-faint)">GitHub Copilot Chat clone • Direct API • Auto fallback for unsupported models • Luna 5.6 supported</div>
     </div>
   </div>
 </div>
@@ -213,19 +244,31 @@ button,input,textarea{font-family:inherit}
 <script>
 const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple',oauth:'copilot_oauth_token',models:'copilot_models_cache'};
 let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',models:[],abort:null,streaming:false};
+// Include Luna 5.6 and GPT-5 as requested
 const DEFAULT_MODELS=[
-  {id:'gpt-4o', name:'GPT-4o', desc:'Best overall • 128k', icon:'✦', badge:'RECOMMENDED'},
-  {id:'gpt-4o-mini', name:'GPT-4o mini', desc:'Fast & cheap', icon:'⚡', badge:'FAST'},
-  {id:'gpt-4.1', name:'GPT-4.1', desc:'Newest • Coding king', icon:'◐', badge:'NEW'},
-  {id:'o1', name:'o1', desc:'Deep reasoning', icon:'🧠', badge:'REASON'},
-  {id:'o3-mini', name:'o3-mini', desc:'Fast reasoning', icon:'💭', badge:'THINK'},
-  {id:'claude-3.5-sonnet', name:'Claude 3.5 Sonnet', desc:'Anthropic • Best code', icon:'♣', badge:'CLAUDE'},
-  {id:'claude-3.7-sonnet', name:'Claude 3.7 Sonnet', desc:'Latest Claude • 200k', icon:'♠', badge:'NEW'},
-  {id:'gemini-2.0-flash-001', name:'Gemini 2.0 Flash', desc:'Google • 1M context', icon:'✧', badge:'GOOGLE'},
+  {id:'gpt-4o', name:'GPT-4o', desc:'Best overall • 128k • Vision', icon:'✦', badge:'RECOMMENDED', group:'OpenAI'},
+  {id:'gpt-4o-mini', name:'GPT-4o mini', desc:'Fast & cheap • 128k', icon:'⚡', badge:'FAST', group:'OpenAI'},
+  {id:'gpt-4.1', name:'GPT-4.1', desc:'Newest OpenAI • Coding king', icon:'◐', badge:'NEW', group:'OpenAI'},
+  {id:'gpt-5', name:'GPT-5', desc:'Next gen • Reasoning', icon:'★', badge:'NEW', group:'OpenAI'},
+  {id:'gpt-5-mini', name:'GPT-5 mini', desc:'GPT-5 fast variant', icon:'☆', badge:'NEW', group:'OpenAI'},
+  {id:'gpt-5.6-luna', name:'GPT-5.6 Luna', desc:'Luna • Creative • 200k', icon:'🌙', badge:'LUNA', group:'OpenAI'},
+  {id:'o1', name:'o1', desc:'Deep reasoning • 200k', icon:'🧠', badge:'REASON', group:'OpenAI'},
+  {id:'o3-mini', name:'o3-mini', desc:'Fast reasoning', icon:'💭', badge:'THINK', group:'OpenAI'},
+  {id:'o4-mini', name:'o4-mini', desc:'Latest mini reasoning', icon:'🔬', badge:'NEW', group:'OpenAI'},
+  {id:'claude-3.5-sonnet', name:'Claude 3.5 Sonnet', desc:'Anthropic • Best code', icon:'♣', badge:'CLAUDE', group:'Anthropic'},
+  {id:'claude-3.7-sonnet', name:'Claude 3.7 Sonnet', desc:'Latest • 200k • Thinking', icon:'♠', badge:'NEW', group:'Anthropic'},
+  {id:'claude-3.7-sonnet-thought', name:'Claude 3.7 Thought', desc:'Extended thinking', icon:'🌀', badge:'THINK', group:'Anthropic'},
+  {id:'gemini-2.0-flash-001', name:'Gemini 2.0 Flash', desc:'Google • 1M context • Fast', icon:'✧', badge:'GOOGLE', group:'Google'},
+  {id:'gemini-2.0-flash-thinking', name:'Gemini 2.0 Thinking', desc:'Google • Reasoning', icon:'✦', badge:'THINK', group:'Google'},
 ];
-const PROMPTS=[{t:'Giải thích code',d:'Giải thích chi tiết logic',p:'Giải thích chi tiết đoạn code này:'},{t:'Fix bug',d:'Tìm và sửa lỗi',p:'Tìm bug và fix:'},{t:'Viết test',d:'Tạo unit test',p:'Viết unit test coverage cao cho:'},{t:'Refactor',d:'Clean & optimize',p:'Refactor code này cho sạch và tối ưu:'}];
+const PROMPTS=[
+  {t:'Explain code',d:'Explain this code in detail',p:'Explain this code in detail, line by line:'},
+  {t:'Fix bug',d:'Find and fix the bug',p:'Find the bug in this code and provide a fix:'},
+  {t:'Write tests',d:'Generate unit tests',p:'Write comprehensive unit tests for:'},
+  {t:'Refactor',d:'Clean and optimize',p:'Refactor this code to be cleaner and more performant:'},
+];
 const $=s=>document.querySelector(s);
-const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),modelIcon=$('#modelIcon'),searchInput=$('#searchInput'),tokenText=$('#tokenText'),userAvatar=$('#userAvatar'),userName=$('#userName'),userMeta=$('#userMeta'),sidebar=$('#sidebar'),openBtn=$('#openBtn'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel'),toast=$('#toast'),countEl=$('#count');
+const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),modelIcon=$('#modelIcon'),searchInput=$('#searchInput'),tokenText=$('#tokenText'),userAvatar=$('#userAvatar'),userName=$('#userName'),userMeta=$('#userMeta'),sidebar=$('#sidebar'),openSidebar=$('#openSidebar'),closeSidebar=$('#closeSidebar'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel'),toast=$('#toast'),countEl=$('#count'),modelHint=$('#modelHint');
 
 function showToast(msg){ toast.textContent=msg; toast.style.display='block'; setTimeout(()=>toast.style.display='none',3000); }
 function init(){
@@ -235,7 +278,7 @@ function init(){
   if(state.oauth||state.pat){ doLoginWithToken(state.oauth||state.pat, true); }
   checkMobile(); window.addEventListener('resize',checkMobile);
 }
-function checkMobile(){const m=innerWidth<=800; openBtn.style.display=m?'grid':'none'; if(!m) sidebar.classList.remove('open');}
+function checkMobile(){const m=innerWidth<=800; openSidebar.style.display=m?'flex':'none'; closeSidebar.style.display=m?'flex':'none'; if(!m) sidebar.classList.remove('open');}
 init();
 
 tabDevice.onclick=()=>{ tabDevice.classList.add('active'); tabPat.classList.remove('active'); devicePanel.style.display='block'; patPanel.style.display='none'; };
@@ -251,35 +294,34 @@ function getApi(){
 
 deviceBtn.onclick=async()=>{
   errBox.style.display='none'; okBox.style.display='none';
-  deviceBtn.textContent='Đang lấy code...'; deviceBtn.disabled=true;
+  deviceBtn.textContent='Getting code...'; deviceBtn.disabled=true;
   try{
     const api=getApi();
     const res=await fetch(api.deviceCode, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},body:new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', scope:'read:user copilot'}).toString()});
     const data=await res.json();
     if(!data.device_code) throw new Error(JSON.stringify(data));
     deviceCode.textContent=data.user_code; deviceBox.style.display='block'; deviceLink.href=data.verification_uri;
-    deviceStatus.textContent=`Mở ${data.verification_uri} và nhập code. Đang chờ...`;
-    okBox.textContent=`Code: ${data.user_code} - Mở ${data.verification_uri}`; okBox.style.display='block';
+    deviceStatus.textContent=`Open ${data.verification_uri} and enter code. Waiting...`;
+    okBox.textContent=`Code: ${data.user_code} - Open ${data.verification_uri}`; okBox.style.display='block';
     const interval=(data.interval||5)*1000; const expiresAt=Date.now()+data.expires_in*1000;
     const poll=async()=>{
-      if(Date.now()>expiresAt){ deviceStatus.textContent='Hết hạn, tạo lại code mới.'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return; }
-      deviceStatus.textContent=`Đang chờ xác thực tại ${data.verification_uri}...`;
+      if(Date.now()>expiresAt){ deviceStatus.textContent='Expired, create new code.'; deviceBtn.textContent='Start Device Flow →'; deviceBtn.disabled=false; return; }
       try{
         const tokenRes=await fetch(api.deviceToken, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},body:new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', device_code:data.device_code, grant_type:'urn:ietf:params:oauth:grant-type:device_code'}).toString()});
         const tokenData=await tokenRes.json();
         if(tokenData.access_token){
-          deviceStatus.textContent='Đã xác thực! Đang lấy Copilot token...';
+          deviceStatus.textContent='Authenticated! Getting Copilot token...';
           state.oauth=tokenData.access_token; localStorage.setItem(LS.oauth, tokenData.access_token);
           await doLoginWithToken(tokenData.access_token, false);
-          deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return;
+          deviceBtn.textContent='Start Device Flow →'; deviceBtn.disabled=false; return;
         } else if(tokenData.error==='authorization_pending'){ setTimeout(poll, interval); }
         else if(tokenData.error==='slow_down'){ setTimeout(poll, interval+5000); }
         else if(tokenData.error){ throw new Error(tokenData.error_description||tokenData.error); }
         else setTimeout(poll, interval);
-      }catch(e){ errBox.textContent='Lỗi: '+e.message; errBox.style.display='block'; setTimeout(poll, interval); }
+      }catch(e){ errBox.textContent='Error: '+e.message; errBox.style.display='block'; setTimeout(poll, interval); }
     };
     setTimeout(poll, interval);
-  }catch(e){ errBox.textContent='Lỗi device flow: '+e.message; errBox.style.display='block'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; }
+  }catch(e){ errBox.textContent='Device flow error: '+e.message; errBox.style.display='block'; deviceBtn.textContent='Start Device Flow →'; deviceBtn.disabled=false; }
 };
 
 async function fetchModels(githubToken){
@@ -292,23 +334,28 @@ async function fetchModels(githubToken){
       if(data.data) models=data.data;
       else if(Array.isArray(data)) models=data;
       if(models.length>0){
-        // Normalize
-        state.models=models.map(m=>({
+        // Keep Luna and GPT-5 if user says they work, even if not in API list
+        const customModels = DEFAULT_MODELS.filter(m=>m.id.includes('luna')||m.id.includes('gpt-5'));
+        const apiModels = models.map(m=>({
           id:m.id||m.model||m.name,
           name:m.name||m.id,
-          desc:m.description||m.capabilities?Object.keys(m.capabilities||{}).join(', '):'Copilot model',
-          icon:m.id?.includes('claude')?'♣':m.id?.includes('gemini')?'✧':m.id?.includes('o1')||m.id?.includes('o3')?'🧠':'✦',
-          badge:m.id?.includes('gpt-4o')?'RECOMMENDED':m.id?.includes('claude')?'CLAUDE':'',
+          desc:m.description||'Copilot model',
+          icon:m.id?.includes('claude')?'♣':m.id?.includes('gemini')?'✧':m.id?.includes('luna')?'🌙':m.id?.includes('gpt-5')?'★':'✦',
+          badge:'',
+          group:m.id?.includes('claude')?'Anthropic':m.id?.includes('gemini')?'Google':'OpenAI',
           raw:m
         }));
+        // Merge, keep custom Luna models at top if not already in list
+        const existingIds = new Set(apiModels.map(x=>x.id));
+        const merged = [...customModels.filter(c=>!existingIds.has(c.id)), ...apiModels];
+        state.models=merged;
         localStorage.setItem(LS.models, JSON.stringify(state.models));
         renderModels();
-        showToast(`Đã tải ${state.models.length} models từ Copilot API`);
+        showToast(`Loaded ${state.models.length} models (including Luna)`);
         return;
       }
     }
   }catch(e){ console.log('fetch models fail', e); }
-  // fallback to default
   state.models=DEFAULT_MODELS;
   renderModels();
 }
@@ -325,20 +372,19 @@ async function doLoginWithToken(githubToken, silent){
     if(githubToken.startsWith('ghu_')||githubToken.startsWith('gho_')){ state.oauth=githubToken; localStorage.setItem(LS.oauth, githubToken); }
     else { state.pat=githubToken; localStorage.setItem(LS.pat, githubToken); }
     localStorage.setItem(LS.token,d.token); localStorage.setItem(LS.expiry,String(state.expiry));
-    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userName.textContent=ud.name||ud.login; userMeta.textContent=`@${ud.login} • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`; if(ud.avatar_url) userAvatar.innerHTML=`<img src="${ud.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`; } }catch{}
+    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userName.textContent=ud.name||ud.login; userMeta.textContent=`@${ud.login} • Copilot`; if(ud.avatar_url) userAvatar.innerHTML=`<img src="${ud.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`; } }catch{}
     loginView.style.display='none'; appView.style.display='flex';
-    tokenText.textContent=`Token • ${Math.floor((state.expiry-Date.now())/60000)}m • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`;
+    tokenText.textContent=`Token • ${Math.floor((state.expiry-Date.now())/60000)}m`;
     if(state.convs.length===0) newChat(); renderList(); renderChat();
-    // Fetch available models
     fetchModels(d.token);
     setInterval(()=>{ tokenText.textContent=`Token • ${Math.max(0,Math.floor((state.expiry-Date.now())/60000))}m`; },10000);
   }catch(e){
     if(!silent){ errBox.textContent='Token fail: '+e.message; errBox.style.display='block'; }
     console.error(e);
   }
-  finally{ if(!silent){ connectBtn.textContent='Connect với PAT →'; connectBtn.disabled=false; } }
+  finally{ if(!silent){ connectBtn.textContent='Connect with PAT →'; connectBtn.disabled=false; } }
 }
-connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Nhập PAT'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
+connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Enter PAT'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
 patInput.onkeydown=e=>{ if(e.key==='Enter') connectBtn.click(); };
 
 function newChat(){ const id=Date.now().toString(36); const c={id,title:'New chat',msgs:[],at:Date.now(),model:state.model}; state.convs.unshift(c); state.curId=id; save(); renderList(); renderChat(); }
@@ -347,49 +393,64 @@ function cur(){ return state.convs.find(x=>x.id===state.curId); }
 function renderList(){
   const q=(searchInput.value||'').toLowerCase();
   convList.innerHTML='';
-  state.convs.filter(c=>!q||c.title.toLowerCase().includes(q)).forEach(c=>{
-    const d=document.createElement('div'); d.className='item'+(c.id===state.curId?' active':'');
-    d.innerHTML=`<div class="title">${esc(c.title)}</div><div class="meta"><span>${c.msgs.length} msgs</span><span>•</span><span>${c.model}</span></div>`;
-    d.onclick=()=>{ state.curId=c.id; save(); renderList(); renderChat(); if(innerWidth<=800) sidebar.classList.remove('open'); };
-    convList.appendChild(d);
+  const groups={}; state.convs.forEach(c=>{ const d=new Date(c.at); const key=d.toDateString()===new Date().toDateString()?'Today':d.toDateString()===new Date(Date.now()-86400000).toDateString()?'Yesterday':'Previous'; (groups[key]=groups[key]||[]).push(c); });
+  Object.entries(groups).filter(([k,v])=>v.some(c=>!q||c.title.toLowerCase().includes(q))).forEach(([label,convs])=>{
+    const gl=document.createElement('div'); gl.className='group-label'; gl.textContent=label; convList.appendChild(gl);
+    convs.filter(c=>!q||c.title.toLowerCase().includes(q)).forEach(c=>{
+      const d=document.createElement('div'); d.className='conv'+(c.id===state.curId?' active':'');
+      d.innerHTML=`<div class="icon">💬</div><div class="title">${esc(c.title)}</div><div class="time">${new Date(c.at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>`;
+      d.onclick=()=>{ state.curId=c.id; save(); renderList(); renderChat(); if(innerWidth<=800) sidebar.classList.remove('open'); };
+      convList.appendChild(d);
+    });
   });
 }
 searchInput.oninput=renderList;
 newBtn.onclick=newChat;
-openBtn.onclick=()=>sidebar.classList.add('open');
+openSidebar.onclick=()=>sidebar.classList.add('open');
+closeSidebar.onclick=()=>sidebar.classList.remove('open');
 
 function renderModels(){
   modelDrop.innerHTML='';
-  state.models.forEach(m=>{
-    const d=document.createElement('div'); d.className='mopt'+(m.id===state.model?' active':'');
-    const badgeClass=m.badge==='RECOMMENDED'?'ok':m.badge?'warn':'';
-    d.innerHTML=`<div><div class="name"><span style="width:24px;height:24px;border-radius:6px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-size:11px">${m.icon||'✦'}</span> ${esc(m.name||m.id)}</div><div class="desc">${esc(m.desc||m.id)}</div></div><span class="badge ${badgeClass}">${m.badge||''}</span>`;
-    d.onclick=()=>{ state.model=m.id; localStorage.setItem(LS.model,m.id); modelName.textContent=m.name||m.id; modelIcon.textContent=m.icon||'✦'; const cc=cur(); if(cc){ cc.model=m.id; save(); } modelDrop.classList.remove('open'); renderList(); showToast(`Đã chọn ${m.name||m.id}`); };
-    modelDrop.appendChild(d);
+  const grouped={};
+  state.models.forEach(m=>{ const g=m.group||'Other'; (grouped[g]=grouped[g]||[]).push(m); });
+  Object.entries(grouped).forEach(([group,models])=>{
+    const gh=document.createElement('div'); gh.className='model-group'; gh.textContent=group; modelDrop.appendChild(gh);
+    models.forEach(m=>{
+      const d=document.createElement('div'); d.className='model-opt'+(m.id===state.model?' active':'');
+      const badgeClass=m.badge==='LUNA'?'badge-luna':m.badge==='NEW'?'badge-new':m.badge==='RECOMMENDED'?'badge-new':'';
+      d.innerHTML=`<div class="micon">${m.icon||'✦'}</div><div class="minfo"><div class="mname">${esc(m.name||m.id)} ${m.badge?`<span class="badge ${badgeClass}">${m.badge}</span>`:''}</div><div class="mdesc">${esc(m.desc||m.id)}</div></div><div class="mcheck">✓</div>`;
+      d.onclick=()=>{ state.model=m.id; localStorage.setItem(LS.model,m.id); modelName.textContent=m.name||m.id; modelIcon.textContent=m.icon||'✦'; modelHint.textContent=m.id; const cc=cur(); if(cc){ cc.model=m.id; save(); } modelDrop.classList.remove('open'); renderList(); showToast(`Selected ${m.name||m.id}`); };
+      modelDrop.appendChild(d);
+    });
   });
   const curM=state.models.find(x=>x.id===state.model)||state.models[0];
-  if(curM){ modelName.textContent=curM.name||curM.id; modelIcon.textContent=curM.icon||'✦'; }
+  if(curM){ modelName.textContent=curM.name||curM.id; modelIcon.textContent=curM.icon||'✦'; modelHint.textContent=curM.id; }
 }
 modelBtn.onclick=()=>modelDrop.classList.toggle('open');
-document.addEventListener('click',e=>{ if(!e.target.closest('.model-select')) modelDrop.classList.remove('open'); });
+document.addEventListener('click',e=>{ if(!e.target.closest('.model-picker')) modelDrop.classList.remove('open'); });
 
 function renderChat(){
   const c=cur();
-  if(!c){ chatInner.innerHTML=`<div class="empty"><div class="empty-icon">C</div><h1>Copilot Chat — Simple Premium</h1><p>Direct Copilot API • SSE streaming • Auto fallback cho model không hỗ trợ. Chọn model ở trên, model nào không hỗ trợ sẽ tự fallback sang gpt-4o.</p><div class="grid">${PROMPTS.map(p=>`<button class="card" data-p="${esc(p.p)}"><b>${esc(p.t)}</b><span>${esc(p.d)}</span></button>`).join('')}</div></div>`; chatInner.querySelectorAll('.card').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); updateCount(); }); return; }
+  if(!c){
+    chatInner.innerHTML=`<div class="welcome"><div class="welcome-header"><div class="welcome-icon">C</div><div><h1>Copilot Chat</h1><p>Ask Copilot for code, explanations, fixes, and more. Supports GPT-5, Luna 5.6, Claude, Gemini, o1.</p></div></div><div class="suggestions">${PROMPTS.map(p=>`<button class="suggestion" data-p="${esc(p.p)}"><b>${esc(p.t)}</b><span>${esc(p.d)}</span></button>`).join('')}</div><div style="margin-top:16px;padding:12px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text-muted)"><b style="color:var(--text)">💡 Luna 5.6:</b> Model gpt-5.6-luna đã được thêm vào danh sách. Nếu tài khoản bạn có quyền, chọn Luna để dùng. Nếu không hỗ trợ, hệ thống tự fallback sang gpt-4o.</div></div>`;
+    chatInner.querySelectorAll('.suggestion').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); updateCount(); });
+    return;
+  }
   chatInner.innerHTML='';
   c.msgs.forEach((m,i)=>{
-    const div=document.createElement('div'); div.className='msg';
-    div.innerHTML=`<div class="msg-avatar ${m.role==='user'?'user':'ai'}">${m.role==='user'?'U':'C'}</div><div class="msg-body"><div class="msg-role">${m.role} • ${new Date(m.at||Date.now()).toLocaleTimeString()}${m.modelUsed?` • used ${m.modelUsed}`:''}</div><div class="msg-content">${md(m.content)}</div><div class="msg-actions"><button class="mini" data-copy>⎙ Copy</button><button class="mini" data-edit>✎ Edit</button></div></div>`;
+    const div=document.createElement('div'); div.className='message';
+    const isUser=m.role==='user';
+    div.innerHTML=`<div class="msg-avatar ${isUser?'user':'assistant'}">${isUser?'U':'C'}</div><div class="msg-body"><div class="msg-header">${isUser?'You':'Copilot'} <small>${new Date(m.at||Date.now()).toLocaleTimeString()}${m.modelUsed?` • ${m.modelUsed}`:''}</small></div><div class="msg-content">${md(m.content)}</div><div class="msg-actions"><button class="action" data-copy>⎙ Copy</button><button class="action" data-edit>✎ Edit</button></div></div>`;
     div.querySelectorAll('pre').forEach(pre=>{
       const code=pre.querySelector('code'); const lang=(code?.className.match(/language-(\w+)/)||[])[1]||'code';
-      const head=document.createElement('div'); head.className='code-head'; head.innerHTML=`<span>${lang}</span><button>Copy</button>`;
+      const head=document.createElement('div'); head.className='code-header'; head.innerHTML=`<span>${lang}</span><button>Copy</button>`;
       pre.prepend(head); head.querySelector('button').onclick=()=>{ navigator.clipboard.writeText(code.textContent); showToast('Copied!'); };
     });
     div.querySelector('[data-copy]').onclick=()=>{ navigator.clipboard.writeText(m.content); showToast('Copied!'); };
     div.querySelector('[data-edit]').onclick=()=>{ if(m.role==='user'){ msgInput.value=m.content; msgInput.focus(); } };
     chatInner.appendChild(div);
   });
-  if(state.streaming){ const d=document.createElement('div'); d.className='msg'; d.innerHTML=`<div class="msg-avatar ai">C</div><div class="msg-body"><div class="msg-role">assistant • thinking...</div><div class="thinking"><span></span><span></span><span></span></div></div>`; chatInner.appendChild(d); }
+  if(state.streaming){ const d=document.createElement('div'); d.className='message'; d.innerHTML=`<div class="msg-avatar assistant">C</div><div class="msg-body"><div class="msg-header">Copilot <small>thinking...</small></div><div class="thinking"><span></span><span></span><span></span></div></div>`; chatInner.appendChild(d); }
   chatWrap.scrollTop=chatWrap.scrollHeight;
   if(window.hljs) document.querySelectorAll('pre code').forEach(b=>{ try{ hljs.highlightElement(b);}catch{} });
 }
@@ -406,28 +467,24 @@ async function send(){
   const ctrl=new AbortController(); state.abort=ctrl; let full=''; let modelUsed=null;
   try{
     const api=getApi();
-    const msgs=[{role:'system',content:'You are GitHub Copilot Chat - Simple Premium. Helpful, concise, expert coding assistant. Use Vietnamese when user speaks Vietnamese. Always use markdown, code blocks with language.'}, ...c.msgs.slice(0,-1).slice(-20).map(m=>({role:m.role,content:m.content}))];
+    const msgs=[{role:'system',content:'You are GitHub Copilot Chat. You are a helpful AI coding assistant. Be concise, accurate, and helpful. Use markdown, code blocks with language tags. Support all languages, use Vietnamese when user speaks Vietnamese.'}, ...c.msgs.slice(0,-1).slice(-20).map(m=>({role:m.role,content:m.content}))];
     const r=await fetch(api.chat,{method:'POST',headers:{'Authorization':`Bearer ${state.copilotToken}`,'Content-Type':'application/json','Editor-Version':'vscode/1.99.3','Editor-Plugin-Version':'copilot-chat/0.26.7','Copilot-Integration-Id':'vscode-chat'},body:JSON.stringify({model:c.model||state.model,messages:msgs,stream:true,temperature:0.7}),signal:ctrl.signal});
     if(!r.ok){
-      const t=await r.text();
-      let errMsg=t;
-      try{ const j=JSON.parse(t); errMsg=j.error?.message||j.error||t; }catch{}
-      // Check if model_not_supported
+      const t=await r.text(); let errMsg=t; try{ const j=JSON.parse(t); errMsg=j.error?.message||j.error||t; }catch{}
       if(t.includes('model_not_supported')||t.includes('not supported')){
-        throw new Error(`Model ${c.model} không được hỗ trợ cho tài khoản của bạn. Worker đã thử fallback sang gpt-4o nhưng vẫn lỗi. Hãy chọn gpt-4o hoặc gpt-4o-mini. Chi tiết: ${errMsg}`);
+        throw new Error(`Model ${c.model} không hỗ trợ. Đã thử fallback nhưng vẫn lỗi. Hãy chọn gpt-4o, gpt-4o-mini, hoặc gpt-5.6-luna (nếu acc bạn có). Lỗi: ${errMsg}`);
       }
       throw new Error(errMsg.slice(0,600));
     }
     modelUsed=r.headers.get('X-Model-Used')||c.model;
-    if(modelUsed!==c.model){ showToast(`Model ${c.model} không hỗ trợ, đã fallback sang ${modelUsed}`); assistant.modelUsed=modelUsed; }
+    if(modelUsed!==c.model){ showToast(`Fallback: ${c.model} → ${modelUsed}`); assistant.modelUsed=modelUsed; }
     const reader=r.body.getReader(); const dec=new TextDecoder(); let buf='';
-    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.msg:last-child .msg-content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
+    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.message:last-child .msg-content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
   }catch(e){
     if(e.name!=='AbortError'){
-      assistant.content=full+`\n\n> ⚠️ **Lỗi:** ${esc(e.message)}\n\n> 💡 **Gợi ý:** Nếu lỗi model_not_supported, hãy bấm chọn model **gpt-4o** hoặc **gpt-4o-mini** ở trên - 2 model này luôn hoạt động với mọi tài khoản Copilot Free/Pro.`;
-      if(e.message.includes('model_not_supported')||e.message.includes('không được hỗ trợ')){
-        // Auto switch to gpt-4o for next time
-        setTimeout(()=>{ showToast('Đã tự chuyển sang gpt-4o cho lần chat sau'); state.model='gpt-4o'; localStorage.setItem(LS.model,'gpt-4o'); renderModels(); }, 1000);
+      assistant.content=full+`\n\n> ⚠️ **Lỗi:** ${esc(e.message)}\n\n> 💡 **Gợi ý:**\n> - Nếu lỗi model_not_supported, chọn **gpt-4o**, **gpt-4o-mini**, hoặc **gpt-5.6-luna** (Luna bạn nói vẫn dùng được)\n> - Copilot Free thường chỉ hỗ trợ gpt-4o/mini, Pro mới có Claude/Gemini/GPT-5\n> - Thử model khác ở dropdown trên topbar`;
+      if(e.message.includes('model_not_supported')||e.message.includes('không hỗ trợ')){
+        setTimeout(()=>{ state.model='gpt-4o'; localStorage.setItem(LS.model,'gpt-4o'); renderModels(); showToast('Đã chuyển sang gpt-4o'); }, 1000);
       }
     }
   }
@@ -437,9 +494,8 @@ function autoResize(){ msgInput.style.height='auto'; msgInput.style.height=Math.
 msgInput.addEventListener('input',()=>{ autoResize(); updateCount(); });
 msgInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } });
 $('#sendBtn').onclick=send;
-$('#stopBtn').onclick=()=>{ if(state.abort) state.abort.abort(); };
 $('#attachBtn').onclick=()=>{ const input=document.createElement('input'); input.type='file'; input.accept='.txt,.md,.js,.ts,.py,.json,.html,.css'; input.onchange=async()=>{ const f=input.files[0]; if(!f) return; const t=await f.text(); msgInput.value+=`\n\n\`\`\`${f.name.split('.').pop()}\n// ${f.name}\n${t.slice(0,12000)}\n\`\`\`\n`; autoResize(); updateCount(); }; input.click(); };
-$('#voiceBtn').onclick=()=>{ if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){ showToast('Browser không hỗ trợ voice'); return; } const SR=window.SpeechRecognition||window.webkitSpeechRecognition; const rec=new SR(); rec.lang='vi-VN'; rec.onresult=e=>{ msgInput.value+=e.results[0][0].transcript; autoResize(); updateCount(); }; rec.start(); showToast('Đang nghe...'); };
+$('#voiceBtn').onclick=()=>{ if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){ showToast('Browser không hỗ trợ voice'); return; } const SR=window.SpeechRecognition||window.webkitSpeechRecognition; const rec=new SR(); rec.lang='vi-VN'; rec.onresult=e=>{ msgInput.value+=e.results[0][0].transcript; autoResize(); updateCount(); }; rec.start(); showToast('Listening...'); };
 $('#clearBtn').onclick=()=>{ const c=cur(); if(c&&confirm('Clear chat?')){ c.msgs=[]; save(); renderChat(); } };
 $('#exportBtn').onclick=()=>{ const c=cur(); if(!c) return; const md=`# ${c.title}\n\nModel: ${c.model}\n\n`+c.msgs.map(m=>`## ${m.role}\n\n${m.content}\n`).join('\n---\n\n'); const blob=new Blob([md],{type:'text/markdown'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=c.id+'.md'; a.click(); URL.revokeObjectURL(url); };
 $('#logoutBtn').onclick=()=>{ if(confirm('Logout?')){ localStorage.clear(); location.reload(); } };
