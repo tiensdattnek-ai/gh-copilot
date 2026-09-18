@@ -10,9 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
 :root{--bg:#ffffff;--bg2:#f6f6f6;--bg3:#eeeeee;--border:#e5e5e5;--border2:#d4d4d4;--text:#111;--dim:#666;--faint:#999;--accent:#111}
-@media(prefers-color-scheme:dark){
-:root{--bg:#0e0e0f;--bg2:#18181b;--bg3:#232326;--border:#222;--border2:#2a2a2e;--text:#f2f2f2;--dim:#999;--faint:#666;--accent:#fff}
-}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0e0f;--bg2:#18181b;--bg3:#232326;--border:#222;--border2:#2a2a2e;--text:#f2f2f2;--dim:#999;--faint:#666;--accent:#fff}}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden}
 button,input,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
@@ -68,14 +66,21 @@ button,input,textarea{font-family:inherit}
 .box textarea{flex:1;border:none;outline:none;resize:none;font-size:14px;line-height:1.5;max-height:160px;min-height:24px;background:transparent;color:var(--text)}
 .send{width:32px;height:32px;border-radius:8px;background:var(--text);color:var(--bg);border:none;display:grid;place-items:center;cursor:pointer}
 .send:disabled{opacity:.4}
-.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:16px;z-index:20}
-.login-box{width:100%;max-width:380px;border:1px solid var(--border);border-radius:16px;padding:24px;background:var(--bg)}
+.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:16px;z-index:20;overflow:auto}
+.login-box{width:100%;max-width:420px;border:1px solid var(--border);border-radius:16px;padding:24px;background:var(--bg)}
 .login-box h1{font-size:20px;margin:0 0 6px;letter-spacing:-.02em}
 .login-box p{font-size:13px;color:var(--dim);line-height:1.5;margin:0 0 16px}
 .login-box input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border2);font-size:13px;font-family:monospace;outline:none;background:var(--bg2);color:var(--text)}
 .login-box button{width:100%;margin-top:12px;padding:10px;border-radius:10px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer}
-.err{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fee;border:1px solid #fcc;color:#c00;font-size:12px;display:none}
+.login-box button.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.err{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fee;border:1px solid #fcc;color:#c00;font-size:12px;display:none;white-space:pre-wrap}
+.ok{margin-top:10px;padding:8px 10px;border-radius:8px;background:#eafff0;border:1px solid #b6f0c0;color:#0a7a20;font-size:12px;display:none;white-space:pre-wrap}
 .help{margin-top:12px;font-size:11px;color:var(--faint);line-height:1.5}
+.tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--bg2);padding:4px;border-radius:10px}
+.tab{flex:1;padding:8px;border-radius:8px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--dim)}
+.tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);border:1px solid var(--border)}
+.device-box{border:1px dashed var(--border2);border-radius:12px;padding:16px;margin-top:12px;text-align:center;display:none}
+.device-code{font-size:28px;font-weight:800;letter-spacing:.15em;font-family:monospace;background:var(--bg2);padding:8px 16px;border-radius:8px;display:inline-block;margin:8px 0}
 @media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:15;transition:.3s;width:84%;max-width:320px}.sidebar.open{transform:translateX(0)}.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -83,13 +88,36 @@ button,input,textarea{font-family:inherit}
 <div id="loginView" class="login">
   <div class="login-box">
     <h1>GitHub Copilot Chat</h1>
-    <p>Simple • Basic • Private. Đăng nhập bằng GitHub PAT để dùng Copilot API trực tiếp với SSE streaming.</p>
-    <input id="patInput" type="password" placeholder="ghp_...">
-    <button id="connectBtn">Connect →</button>
+    <p>Simple • Basic • Private. Dùng trực tiếp Copilot API với SSE streaming. Login bằng OAuth Device Flow (giống VS Code) - không cần PAT.</p>
+    
+    <div class="tabs">
+      <button class="tab active" id="tabDevice">🔐 Device Flow (Khuyên dùng)</button>
+      <button class="tab" id="tabPat">🔑 PAT</button>
+    </div>
+
+    <div id="devicePanel">
+      <p style="font-size:12px;color:var(--dim)">Cách này giống VS Code login, lấy token <code>ghu_</code> - GitHub cho phép lấy Copilot token, PAT (ghp_) đã bị chặn 404.</p>
+      <button id="deviceBtn">Bắt đầu Device Flow →</button>
+      <div class="device-box" id="deviceBox">
+        <div style="font-size:12px;color:var(--dim)">1. Mở <a href="https://github.com/login/device" target="_blank">github.com/login/device</a></div>
+        <div style="font-size:12px;color:var(--dim);margin-top:4px">2. Nhập code:</div>
+        <div class="device-code" id="deviceCode">----</div>
+        <div style="font-size:11px;color:var(--faint);margin-top:8px" id="deviceStatus">Đang chờ bạn xác thực...</div>
+        <div style="margin-top:10px"><a id="deviceLink" href="https://github.com/login/device" target="_blank" style="font-size:12px">Mở trang xác thực →</a></div>
+      </div>
+    </div>
+
+    <div id="patPanel" style="display:none">
+      <input id="patInput" type="password" placeholder="ghp_... hoặc ghu_... hoặc github_pat_...">
+      <button id="connectBtn">Connect với PAT →</button>
+      <div class="help">PAT classic (ghp_) hiện bị GitHub chặn 404 khi lấy Copilot token. Hãy dùng Device Flow ở trên hoặc tạo Fine-grained PAT với Copilot permission.</div>
+    </div>
+
     <div id="errBox" class="err"></div>
+    <div id="okBox" class="ok"></div>
     <div class="help">
-      Tạo PAT: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a> (classic, tick read:user). Token chỉ lưu local.<br><br>
-      Deploy Cloudflare Pages: app tự dùng <code>/api/token</code> và <code>/api/chat/completions</code> để tránh CORS.
+      Sau khi login, app dùng <code>/api/token</code> để lấy Copilot token và <code>/api/chat/completions</code> để chat streaming. Token chỉ lưu local.<br><br>
+      <b>Lưu ý:</b> Tài khoản phải có Copilot active tại <a href="https://github.com/settings/copilot" target="_blank">github.com/settings/copilot</a> (Free cũng được).
     </div>
   </div>
 </div>
@@ -115,59 +143,144 @@ button,input,textarea{font-family:inherit}
     <div class="input-wrap">
       <div class="box">
         <div class="row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot..."></textarea><button class="send" id="sendBtn">↑</button></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--faint)"><span>Enter gửi • Shift+Enter xuống dòng • ⌘K new chat</span><span id="count">~0 tokens</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--faint)"><span>Enter gửi • Shift+Enter xuống dòng • ⌘K new</span><span id="count">~0 tokens</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple'};
-let state={pat:localStorage.getItem(LS.pat)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',abort:null,streaming:false};
+const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple',oauth:'copilot_oauth_token'};
+let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',abort:null,streaming:false};
 const MODELS=['gpt-4o','gpt-4o-mini','gpt-4.1','o1','o3-mini','claude-3.5-sonnet','claude-3.7-sonnet','gemini-2.0-flash-001'];
 const PROMPTS=[{t:'Giải thích code',p:'Giải thích đoạn code này:'},{t:'Fix bug',p:'Tìm và fix bug:'},{t:'Viết test',p:'Viết unit test cho:'},{t:'Refactor',p:'Refactor code này:'}];
 const $=s=>document.querySelector(s);
-const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),searchInput=$('#searchInput'),tokenStatus=$('#tokenStatus'),userInfo=$('#userInfo'),sidebar=$('#sidebar'),openBtn=$('#openBtn');
+const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),searchInput=$('#searchInput'),tokenStatus=$('#tokenStatus'),userInfo=$('#userInfo'),sidebar=$('#sidebar'),openBtn=$('#openBtn'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel');
 
 function init(){
   if(state.pat) patInput.value=state.pat;
   renderModels(); renderList();
-  if(state.pat) doLogin(true);
+  if(state.oauth||state.pat){ doLoginWithToken(state.oauth||state.pat, true); }
   checkMobile(); window.addEventListener('resize',checkMobile);
 }
 function checkMobile(){const m=innerWidth<=800; openBtn.style.display=m?'block':'none'; if(!m) sidebar.classList.remove('open');}
 init();
 
+tabDevice.onclick=()=>{ tabDevice.classList.add('active'); tabPat.classList.remove('active'); devicePanel.style.display='block'; patPanel.style.display='none'; };
+tabPat.onclick=()=>{ tabPat.classList.add('active'); tabDevice.classList.remove('active'); patPanel.style.display='block'; devicePanel.style.display='none'; };
+
 function getApi(){
   const host=location.hostname;
-  if(host.includes('pages.dev')||host.includes('workers.dev')||localStorage.getItem('force_cf')==='1'){
-    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions'};
+  if(host.includes('workers.dev')||host.includes('pages.dev')||location.pathname.startsWith('/api/')){
+    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions',deviceCode:'/api/device/code',deviceToken:'/api/device/token'};
   }
-  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions'};
+  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions',deviceCode:'https://github.com/login/device/code',deviceToken:'https://github.com/login/oauth/access_token'};
 }
 
-async function doLogin(silent){
-  const pat=patInput.value.trim()||state.pat;
-  if(!pat){ if(!silent) showErr('Nhập PAT'); return; }
-  if(!silent){ connectBtn.textContent='...'; connectBtn.disabled=true; errBox.style.display='none'; }
+// Device Flow
+deviceBtn.onclick=async()=>{
+  errBox.style.display='none'; okBox.style.display='none';
+  deviceBtn.textContent='Đang lấy code...'; deviceBtn.disabled=true;
   try{
     const api=getApi();
-    const r=await fetch(api.token,{headers:{Authorization:`token ${pat}`}});
-    if(!r.ok){ const t=await r.text(); throw new Error(`Token fail ${r.status}: ${t.slice(0,300)}`); }
-    const d=await r.json();
-    state.pat=pat; state.copilotToken=d.token; state.expiry=d.expires_at?d.expires_at*1000:Date.now()+25*60*1000;
-    localStorage.setItem(LS.pat,pat); localStorage.setItem(LS.token,d.token); localStorage.setItem(LS.expiry,String(state.expiry));
-    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${pat}`}}); if(u.ok){ const ud=await u.json(); userInfo.textContent=`@${ud.login}`; } }catch{}
+    // Step 1: Get device code
+    const res=await fetch(api.deviceCode, {
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
+      body: new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', scope:'read:user copilot'}).toString()
+    });
+    const data=await res.json();
+    if(!data.device_code) throw new Error(JSON.stringify(data));
+    
+    deviceCode.textContent=data.user_code;
+    deviceBox.style.display='block';
+    deviceLink.href=data.verification_uri;
+    deviceStatus.textContent=`Mở ${data.verification_uri} và nhập code trên. Đang chờ... (${data.expires_in}s)`;
+    okBox.textContent=`Đã tạo code: ${data.user_code}\nMở ${data.verification_uri} để xác thực.`; okBox.style.display='block';
+    
+    // Step 2: Poll for token
+    const interval=(data.interval||5)*1000;
+    const expiresAt=Date.now()+data.expires_in*1000;
+    let attempts=0;
+    const poll=async()=>{
+      if(Date.now()>expiresAt){ deviceStatus.textContent='Hết hạn, bấm lại để tạo code mới.'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return; }
+      attempts++;
+      deviceStatus.textContent=`Đang chờ xác thực... (lần ${attempts}) - Mở ${data.verification_uri} nhập ${data.user_code}`;
+      try{
+        const tokenRes=await fetch(api.deviceToken, {
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
+          body: new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', device_code:data.device_code, grant_type:'urn:ietf:params:oauth:grant-type:device_code'}).toString()
+        });
+        const tokenData=await tokenRes.json();
+        if(tokenData.access_token){
+          deviceStatus.textContent='Đã xác thực! Đang lấy Copilot token...';
+          // Save oauth token and try to get copilot token
+          state.oauth=tokenData.access_token;
+          localStorage.setItem(LS.oauth, tokenData.access_token);
+          await doLoginWithToken(tokenData.access_token, false);
+          deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false;
+          return;
+        } else if(tokenData.error==='authorization_pending'){
+          // continue polling
+          setTimeout(poll, interval);
+        } else if(tokenData.error==='slow_down'){
+          setTimeout(poll, interval+5000);
+        } else if(tokenData.error){
+          throw new Error(tokenData.error_description||tokenData.error);
+        } else {
+          setTimeout(poll, interval);
+        }
+      }catch(e){
+        errBox.textContent='Lỗi poll token: '+e.message; errBox.style.display='block';
+        setTimeout(poll, interval);
+      }
+    };
+    setTimeout(poll, interval);
+  }catch(e){
+    errBox.textContent='Lỗi device flow: '+e.message; errBox.style.display='block';
+    deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false;
+  }
+};
+
+async function doLoginWithToken(githubToken, silent){
+  const api=getApi();
+  if(!silent){ connectBtn.textContent='...'; connectBtn.disabled=true; errBox.style.display='none'; okBox.style.display='none'; }
+  try{
+    // Try to get copilot token using github token (ghu_ or pat)
+    const r=await fetch(api.token,{headers:{Authorization:`token ${githubToken}`}});
+    const text=await r.text();
+    let d;
+    try{ d=JSON.parse(text); }catch{ throw new Error(text.slice(0,500)); }
+    if(!r.ok){
+      const errMsg=d.error||d.message||text;
+      throw new Error(`${r.status}: ${typeof errMsg==='string'?errMsg:JSON.stringify(errMsg).slice(0,500)}`);
+    }
+    if(!d.token) throw new Error('Không có token trong response: '+text.slice(0,300));
+    
+    state.copilotToken=d.token; state.expiry=d.expires_at?d.expires_at*1000:Date.now()+25*60*1000;
+    // Save github token as pat for reuse
+    if(githubToken.startsWith('ghu_')||githubToken.startsWith('gho_')){
+      state.oauth=githubToken; localStorage.setItem(LS.oauth, githubToken);
+    } else {
+      state.pat=githubToken; localStorage.setItem(LS.pat, githubToken);
+    }
+    localStorage.setItem(LS.token,d.token); localStorage.setItem(LS.expiry,String(state.expiry));
+    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userInfo.textContent=`@${ud.login} • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`; } }catch{}
     loginView.style.display='none'; appView.style.display='flex';
-    tokenStatus.textContent=`Token active • ${Math.floor((state.expiry-Date.now())/60000)}m`;
+    tokenStatus.textContent=`Token active • ${Math.floor((state.expiry-Date.now())/60000)}m • ${githubToken.startsWith('ghu_')?'OAuth Device Flow':'PAT'}`;
     if(state.convs.length===0) newChat(); renderList(); renderChat();
     setInterval(()=>{ tokenStatus.textContent=`Token active • ${Math.max(0,Math.floor((state.expiry-Date.now())/60000))}m`; },10000);
-  }catch(e){ showErr(e.message); }
-  finally{ connectBtn.textContent='Connect →'; connectBtn.disabled=false; }
+    okBox.textContent='Đã kết nối thành công!'; okBox.style.display='block';
+  }catch(e){
+    if(!silent){ errBox.textContent='Token fail: '+e.message; errBox.style.display='block'; }
+    console.error(e);
+  }
+  finally{ if(!silent){ connectBtn.textContent='Connect với PAT →'; connectBtn.disabled=false; } }
 }
-function showErr(m){ errBox.textContent=m; errBox.style.display='block'; }
-connectBtn.onclick=()=>doLogin(false);
-patInput.onkeydown=e=>{ if(e.key==='Enter') doLogin(false); };
+
+connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Nhập PAT'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
+patInput.onkeydown=e=>{ if(e.key==='Enter') connectBtn.click(); };
 
 function newChat(){ const id=Date.now().toString(36); const c={id,title:'New chat',msgs:[],at:Date.now(),model:state.model}; state.convs.unshift(c); state.curId=id; save(); renderList(); renderChat(); }
 function save(){ localStorage.setItem(LS.conv,JSON.stringify(state.convs)); localStorage.setItem(LS.cur,state.curId); }
@@ -200,7 +313,7 @@ document.addEventListener('click',e=>{ if(!e.target.closest('#modelBtn')&&!e.tar
 
 function renderChat(){
   const c=cur();
-  if(!c){ chatInner.innerHTML=`<div class="empty"><h1>Copilot Chat - Simple</h1><p>Login bằng PAT GitHub, dùng trực tiếp Copilot API, streaming SSE. Simple, fast, private.</p><div class="grid">${PROMPTS.map(p=>`<button class="card" data-p="${esc(p.p)}"><b>${p.t}</b>${p.p}</button>`).join('')}</div></div>`; chatInner.querySelectorAll('.card').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); }); return; }
+  if(!c){ chatInner.innerHTML=`<div class="empty"><h1>Copilot Chat - Simple</h1><p>Login bằng OAuth Device Flow (giống VS Code) để dùng Copilot API trực tiếp với SSE streaming. PAT (ghp_) đã bị GitHub chặn 404.</p><div class="grid">${PROMPTS.map(p=>`<button class="card" data-p="${esc(p.p)}"><b>${p.t}</b>${p.p}</button>`).join('')}</div></div>`; chatInner.querySelectorAll('.card').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); }); return; }
   chatInner.innerHTML='';
   c.msgs.forEach((m,i)=>{
     const div=document.createElement('div'); div.className='msg';

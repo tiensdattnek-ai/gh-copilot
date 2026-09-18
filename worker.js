@@ -13,7 +13,38 @@ export default {
       });
     }
 
-    // Helper to try multiple endpoints
+    // Device Flow: /api/device/code
+    if (url.pathname === '/api/device/code') {
+      try {
+        const body = await request.text();
+        const res = await fetch('https://github.com/login/device/code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'User-Agent': 'gh-copilot' },
+          body: body
+        });
+        const text = await res.text();
+        return new Response(text, { status: res.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+    }
+
+    // Device Flow: /api/device/token
+    if (url.pathname === '/api/device/token') {
+      try {
+        const body = await request.text();
+        const res = await fetch('https://github.com/login/oauth/access_token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'User-Agent': 'gh-copilot' },
+          body: body
+        });
+        const text = await res.text();
+        return new Response(text, { status: res.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+    }
+
     async function getCopilotToken(auth) {
       const endpoints = [
         'https://api.github.com/copilot_internal/v2/token',
@@ -33,11 +64,9 @@ export default {
           }
           lastRes = res;
           lastText = text;
-          // If 401/403, don't try next, it's auth issue
           if (res.status === 401 || res.status === 403) {
             return { ok: false, status: res.status, text, endpoint: ep };
           }
-          // If 404, try next endpoint
         } catch (e) {
           lastText = e.message;
         }
@@ -53,7 +82,6 @@ export default {
       if (result.ok) {
         return new Response(result.text, { status: result.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' } });
       } else {
-        // Return helpful error
         let msg = result.text;
         try {
           const j = JSON.parse(result.text);
@@ -61,7 +89,7 @@ export default {
         } catch {}
         const is404 = result.status === 404;
         const help = is404 
-          ? `Tài khoản chưa có GitHub Copilot subscription hoặc PAT không có quyền. 1) Kiểm tra https://github.com/settings/copilot - phải có Copilot active. 2) Tạo PAT classic tại https://github.com/settings/tokens/new - tick read:user. 3) Nếu dùng Copilot Free, thử đăng nhập lại GitHub. Endpoint thử: ${result.endpoint}`
+          ? `PAT (ghp_) bị GitHub chặn 404. Hãy dùng OAuth Device Flow: Bấm "Bắt đầu Device Flow" để lấy token ghu_ (giống VS Code). Tài khoản phải có Copilot active tại github.com/settings/copilot.`
           : `Lỗi ${result.status}: ${msg}`;
         return new Response(JSON.stringify({ error: help, original: result.text, status: result.status, endpoint: result.endpoint }), { status: result.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
       }
@@ -85,7 +113,6 @@ export default {
       if (!auth) return new Response(JSON.stringify({ error: 'Missing Authorization' }), { status: 401, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
       try {
         const body = await request.text();
-        // Try multiple chat endpoints
         const chatEndpoints = [
           'https://api.githubcopilot.com/chat/completions',
           'https://api.individual.githubcopilot.com/chat/completions'
@@ -132,7 +159,6 @@ export default {
       }
     }
 
-    // Serve static
     try {
       if (env.ASSETS) {
         return await env.ASSETS.fetch(request);
