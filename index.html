@@ -3,167 +3,239 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Copilot Chat - Simple</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Copilot Chat - Simple Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
-:root{--bg:#ffffff;--bg2:#f6f6f6;--bg3:#eeeeee;--border:#e5e5e5;--border2:#d4d4d4;--text:#111;--dim:#666;--faint:#999;--accent:#111}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0e0f;--bg2:#18181b;--bg3:#232326;--border:#222;--border2:#2a2a2e;--text:#f2f2f2;--dim:#999;--faint:#666;--accent:#fff}}
-*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden}
+:root{
+  --bg:#fcfcf9;--bg2:#f5f5f0;--bg3:#eeeee8;--border:#e8e8e0;--border2:#d8d8d0;
+  --text:#11110f;--dim:#6b6b60;--faint:#9a9a90;--accent:#11110f;
+  --radius:14px;--radius-lg:20px;--shadow:0 4px 24px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.06);
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0f0f0e;--bg2:#1a1a18;--bg3:#252522;--border:#22221e;--border2:#2e2e28;--text:#f5f5f0;--dim:#9a9a90;--faint:#6b6b60;--accent:#f5f5f0;--shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 12px 40px rgba(0,0,0,.4)}
+}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden;letter-spacing:-.01em}
 button,input,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
 .app{display:flex;height:100vh}
-.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
-.brand{padding:20px 16px 12px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
-.brand-mark{width:28px;height:28px;background:var(--text);color:var(--bg);border-radius:8px;display:grid;place-items:center;font-weight:800}
-.new-btn{margin:0 12px 12px;padding:10px;border-radius:10px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer}
-.new-btn:hover{opacity:.9}
-.search{margin:0 12px 12px;position:relative}
-.search input{width:100%;padding:8px 10px 8px 28px;border-radius:8px;background:var(--bg);border:1px solid var(--border);font-size:12px;outline:none;color:var(--text)}
-.search svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);opacity:.5}
-.list{flex:1;overflow:auto;padding:0 8px;display:flex;flex-direction:column;gap:2px}
-.item{padding:10px 10px;border-radius:8px;cursor:pointer;font-size:13px;line-height:1.3}
-.item:hover{background:var(--bg3)}
-.item.active{background:var(--bg3);font-weight:500}
-.item .meta{font-size:11px;color:var(--faint);margin-top:2px}
-.foot{padding:12px;border-top:1px solid var(--border);font-size:11px;color:var(--dim)}
-.main{flex:1;display:flex;flex-direction:column;min-width:0}
-.top{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.model-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);font-size:12px;font-weight:500;cursor:pointer;display:flex;gap:6px;align-items:center}
-.model-drop{position:absolute;top:44px;left:0;width:300px;background:var(--bg);border:1px solid var(--border2);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.1);padding:6px;z-index:10;display:none;max-height:400px;overflow:auto}
-.model-drop.open{display:block}
-.mopt{padding:8px 10px;border-radius:8px;cursor:pointer}
-.mopt:hover{background:var(--bg2)}
-.mopt.active{background:var(--bg2);border:1px solid var(--border)}
-.chat{flex:1;overflow:auto;padding:24px 0 140px}
-.inner{max-width:720px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column;gap:24px}
-.empty{margin-top:10vh;text-align:center}
-.empty h1{font-size:24px;letter-spacing:-.02em;margin:0 0 8px}
-.empty p{color:var(--dim);font-size:14px;max-width:420px;margin:0 auto 16px;line-height:1.5}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:480px;margin:16px auto}
-.card{padding:12px;border:1px solid var(--border);border-radius:10px;text-align:left;background:var(--bg2);cursor:pointer;font-size:12px}
-.card:hover{border-color:var(--border2)}
-.card b{display:block;font-size:12px;margin-bottom:2px}
-.msg{display:flex;gap:12px}
-.avatar{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
-.avatar.user{background:var(--bg3);border:1px solid var(--border)}
-.avatar.ai{background:var(--text);color:var(--bg)}
-.body{flex:1;min-width:0}
-.role{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:600;margin-bottom:4px}
-.content{font-size:14px;line-height:1.6}
-.content pre{background:#111;color:#eee;border-radius:10px;overflow:hidden;margin:10px 0}
-.content pre code{font-size:13px}
-.content p{margin:0 0 10px}
-.actions{display:flex;gap:6px;margin-top:8px;opacity:0;transition:.2s}
-.msg:hover .actions{opacity:1}
-.mini{padding:4px 8px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);font-size:11px;cursor:pointer}
-.input-wrap{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(to top,var(--bg) 60%,transparent)}
-.box{max-width:720px;margin:0 auto;background:var(--bg);border:1px solid var(--border2);border-radius:16px;padding:10px 10px 10px 14px;box-shadow:0 4px 20px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
-.box:focus-within{border-color:var(--text)}
-.row{display:flex;gap:8px;align-items:flex-end}
-.box textarea{flex:1;border:none;outline:none;resize:none;font-size:14px;line-height:1.5;max-height:160px;min-height:24px;background:transparent;color:var(--text)}
-.send{width:32px;height:32px;border-radius:8px;background:var(--text);color:var(--bg);border:none;display:grid;place-items:center;cursor:pointer}
-.send:disabled{opacity:.4}
-.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:16px;z-index:20;overflow:auto}
-.login-box{width:100%;max-width:420px;border:1px solid var(--border);border-radius:16px;padding:24px;background:var(--bg)}
-.login-box h1{font-size:20px;margin:0 0 6px;letter-spacing:-.02em}
-.login-box p{font-size:13px;color:var(--dim);line-height:1.5;margin:0 0 16px}
-.login-box input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border2);font-size:13px;font-family:monospace;outline:none;background:var(--bg2);color:var(--text)}
-.login-box button{width:100%;margin-top:12px;padding:10px;border-radius:10px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer}
-.login-box button.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
-.err{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fee;border:1px solid #fcc;color:#c00;font-size:12px;display:none;white-space:pre-wrap}
-.ok{margin-top:10px;padding:8px 10px;border-radius:8px;background:#eafff0;border:1px solid #b6f0c0;color:#0a7a20;font-size:12px;display:none;white-space:pre-wrap}
-.help{margin-top:12px;font-size:11px;color:var(--faint);line-height:1.5}
-.tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--bg2);padding:4px;border-radius:10px}
-.tab{flex:1;padding:8px;border-radius:8px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--dim)}
-.tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);border:1px solid var(--border)}
-.device-box{border:1px dashed var(--border2);border-radius:12px;padding:16px;margin-top:12px;text-align:center;display:none}
-.device-code{font-size:28px;font-weight:800;letter-spacing:.15em;font-family:monospace;background:var(--bg2);padding:8px 16px;border-radius:8px;display:inline-block;margin:8px 0}
-@media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:15;transition:.3s;width:84%;max-width:320px}.sidebar.open{transform:translateX(0)}.grid{grid-template-columns:1fr}}
+.sidebar{width:300px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:relative}
+.brand{padding:22px 18px 14px;display:flex;align-items:center;gap:10px}
+.brand-mark{width:32px;height:32px;background:var(--text);color:var(--bg);border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;letter-spacing:-.02em}
+.brand-text b{font-size:14px;font-weight:700;letter-spacing:-.02em;display:block;line-height:1}
+.brand-text small{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.new-btn{margin:0 12px 14px;padding:12px 14px;border-radius:12px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.new-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15);opacity:.92}
+.search{margin:0 12px 14px;position:relative}
+.search input{width:100%;padding:10px 12px 10px 32px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:13px;outline:none;color:var(--text);transition:.2s}
+.search input:focus{border-color:var(--border2);box-shadow:0 0 0 3px var(--bg3)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.4}
+.list{flex:1;overflow:auto;padding:0 10px;display:flex;flex-direction:column;gap:3px}
+.item{padding:11px 12px;border-radius:10px;cursor:pointer;transition:.15s;border:1px solid transparent}
+.item:hover{background:var(--bg3);border-color:var(--border)}
+.item.active{background:var(--bg);border-color:var(--border2);box-shadow:var(--shadow)}
+.item .title{font-size:13px;font-weight:500;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .meta{font-size:11px;color:var(--faint);margin-top:3px;display:flex;gap:6px}
+.foot{padding:14px;border-top:1px solid var(--border);background:var(--bg2)}
+.user-card{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:8px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:12px}
+.status{font-size:11px;padding:8px 10px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}70%{box-shadow:0 0 0 6px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
+.top{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(252,252,249,.8);backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}
+@media(prefers-color-scheme:dark){.top{background:rgba(15,15,14,.8)}}
+.model-select{position:relative}
+.model-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s;min-width:200px;justify-content:space-between}
+.model-btn:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-1px)}
+.model-drop{position:absolute;top:calc(100% + 8px);left:0;width:340px;background:var(--bg);border:1px solid var(--border2);border-radius:16px;box-shadow:var(--shadow-lg);padding:6px;z-index:20;display:none;max-height:440px;overflow:auto}
+.model-drop.open{display:block;animation:dropIn .2s ease}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mopt{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.15s;border:1px solid transparent}
+.mopt:hover{background:var(--bg2);border-color:var(--border)}
+.mopt.active{background:var(--bg2);border-color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.mopt .name{font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px}
+.mopt .desc{font-size:11px;color:var(--dim);margin-top:2px}
+.badge{font-size:9px;padding:2px 6px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);font-weight:700;letter-spacing:.04em}
+.badge.ok{background:#dcfce7;border-color:#bbf7d0;color:#166534}
+.badge.warn{background:#fef9c3;border-color:#fde68a;color:#854d0e}
+.chat{flex:1;overflow:auto;scroll-behavior:smooth}
+.inner{max-width:760px;margin:0 auto;padding:28px 20px 160px;display:flex;flex-direction:column;gap:28px}
+.empty{margin-top:6vh;text-align:center;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.empty-icon{width:56px;height:56px;border-radius:16px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:22px;margin:0 auto 14px}
+.empty h1{font-size:22px;letter-spacing:-.03em;margin:0 0 8px;font-weight:700}
+.empty p{color:var(--dim);font-size:14px;max-width:440px;margin:0 auto 20px;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;margin:0 auto;text-align:left}
+.card{padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);cursor:pointer;transition:.2s}
+.card:hover{background:var(--bg);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow)}
+.card b{font-size:13px;display:block;margin-bottom:3px}
+.card span{font-size:12px;color:var(--dim);line-height:1.4}
+.msg{display:flex;gap:14px;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-avatar{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.msg-avatar.user{background:var(--bg3);border:1px solid var(--border);color:var(--dim)}
+.msg-avatar.ai{background:var(--text);color:var(--bg)}
+.msg-body{flex:1;min-width:0}
+.msg-role{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.msg-content{font-size:14.5px;line-height:1.65;color:var(--text)}
+.msg-content p{margin:0 0 12px}
+.msg-content pre{margin:12px 0;background:#11110f;border-radius:12px;overflow:hidden;border:1px solid #222}
+.msg-content pre code{font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6}
+.code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.06);border-bottom:1px solid #222;font-size:11px;color:#888;font-family:"JetBrains Mono",monospace}
+.code-head button{padding:4px 8px;border-radius:6px;border:1px solid #333;background:rgba(255,255,255,.08);color:#ddd;font-size:11px;cursor:pointer}
+.msg-actions{margin-top:10px;display:flex;gap:6px;opacity:0;transition:.2s}
+.msg:hover .msg-actions{opacity:1}
+.mini{padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s}
+.mini:hover{background:var(--bg3);border-color:var(--border2)}
+.thinking{display:flex;gap:5px;align-items:center;padding:6px 0}
+.thinking span{width:6px;height:6px;background:var(--faint);border-radius:50%;animation:bounce 1.2s infinite}
+.thinking span:nth-child(2){animation-delay:.15s}
+.thinking span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.input-wrap{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 16px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.box{max-width:760px;margin:0 auto;background:var(--bg);border:1px solid var(--border2);border-radius:20px;padding:10px 10px 10px 16px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:8px;transition:.2s}
+.box:focus-within{border-color:var(--text);box-shadow:0 0 0 3px var(--bg3),var(--shadow-lg);transform:translateY(-1px)}
+.row{display:flex;gap:10px;align-items:flex-end}
+.box textarea{flex:1;border:none;outline:none;resize:none;font-size:14.5px;line-height:1.55;max-height:160px;min-height:24px;background:transparent;color:var(--text)}
+.box textarea::placeholder{color:var(--faint)}
+.send{width:36px;height:36px;border-radius:12px;background:var(--text);color:var(--bg);border:none;display:grid;place-items:center;cursor:pointer;transition:.2s;flex-shrink:0}
+.send:hover{transform:scale(1.05)}
+.send:disabled{opacity:.4;transform:none}
+.tools{display:flex;justify-content:space-between;align-items:center}
+.tools-left{display:flex;gap:6px;align-items:center}
+.icon{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);display:grid;place-items:center;cursor:pointer;transition:.15s;color:var(--dim);font-size:13px}
+.icon:hover{background:var(--bg3);color:var(--text);transform:translateY(-1px)}
+.hint{max-width:760px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--faint)}
+.login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:20px;z-index:30;overflow:auto}
+.login-card{width:100%;max-width:440px;border:1px solid var(--border);border-radius:20px;padding:28px;background:var(--bg);box-shadow:var(--shadow-lg);animation:fadeIn .4s ease}
+.login-card h1{font-size:22px;margin:0 0 6px;letter-spacing:-.03em;font-weight:700}
+.login-card p{font-size:13.5px;color:var(--dim);line-height:1.5;margin:0 0 18px}
+.login-card input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border2);font-size:13px;font-family:"JetBrains Mono",monospace;outline:none;background:var(--bg2);color:var(--text);transition:.2s}
+.login-card input:focus{border-color:var(--text);box-shadow:0 0 0 3px var(--bg3)}
+.login-card button{width:100%;margin-top:12px;padding:12px;border-radius:12px;background:var(--text);color:var(--bg);border:none;font-weight:600;font-size:13px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.login-card button:hover{transform:translateY(-1px);opacity:.9}
+.login-card button.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.login-card button.secondary:hover{background:var(--bg3)}
+.tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--bg2);padding:4px;border-radius:12px;border:1px solid var(--border)}
+.tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--dim);transition:.15s}
+.tab.active{background:var(--bg);color:var(--text);box-shadow:var(--shadow);border:1px solid var(--border2)}
+.err{margin-top:12px;padding:10px 12px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:12px;display:none;white-space:pre-wrap;line-height:1.4}
+.ok{margin-top:12px;padding:10px 12px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:12px;display:none;white-space:pre-wrap}
+.help{margin-top:14px;font-size:11px;color:var(--faint);line-height:1.5;padding:12px;background:var(--bg2);border-radius:10px;border:1px solid var(--border)}
+.device-box{border:1px dashed var(--border2);border-radius:14px;padding:18px;margin-top:14px;text-align:center;display:none;background:var(--bg2)}
+.device-code{font-size:28px;font-weight:800;letter-spacing:.18em;font-family:"JetBrains Mono",monospace;background:var(--bg);border:1px solid var(--border2);padding:10px 18px;border-radius:10px;display:inline-block;margin:10px 0;box-shadow:var(--shadow)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:12px;font-weight:500;box-shadow:var(--shadow-lg);z-index:100;display:none;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:800px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);z-index:15;transition:.3s;width:86%;max-width:340px}.sidebar.open{transform:translateX(0)}.grid{grid-template-columns:1fr}.inner{padding:20px 14px 160px}.box{border-radius:16px}.top{padding:0 12px}}
 </style>
 </head>
 <body>
 <div id="loginView" class="login">
-  <div class="login-box">
+  <div class="login-card">
     <h1>GitHub Copilot Chat</h1>
-    <p>Simple • Basic • Private. Dùng trực tiếp Copilot API với SSE streaming. Login bằng OAuth Device Flow (giống VS Code) - không cần PAT.</p>
-    
+    <p>Simple premium • Private • SSE streaming. Dùng trực tiếp Copilot API. Login bằng OAuth Device Flow (giống VS Code).</p>
     <div class="tabs">
-      <button class="tab active" id="tabDevice">🔐 Device Flow (Khuyên dùng)</button>
+      <button class="tab active" id="tabDevice">🔐 Device Flow</button>
       <button class="tab" id="tabPat">🔑 PAT</button>
     </div>
-
     <div id="devicePanel">
-      <p style="font-size:12px;color:var(--dim)">Cách này giống VS Code login, lấy token <code>ghu_</code> - GitHub cho phép lấy Copilot token, PAT (ghp_) đã bị chặn 404.</p>
+      <p style="font-size:12px;color:var(--dim);margin-bottom:12px">PAT (ghp_) đã bị GitHub chặn 404. Device Flow lấy token <code>ghu_</code> - cách duy nhất hoạt động hiện tại.</p>
       <button id="deviceBtn">Bắt đầu Device Flow →</button>
       <div class="device-box" id="deviceBox">
-        <div style="font-size:12px;color:var(--dim)">1. Mở <a href="https://github.com/login/device" target="_blank">github.com/login/device</a></div>
-        <div style="font-size:12px;color:var(--dim);margin-top:4px">2. Nhập code:</div>
+        <div style="font-size:12px;color:var(--dim)">Mở <a href="https://github.com/login/device" target="_blank" style="font-weight:600">github.com/login/device</a> và nhập:</div>
         <div class="device-code" id="deviceCode">----</div>
-        <div style="font-size:11px;color:var(--faint);margin-top:8px" id="deviceStatus">Đang chờ bạn xác thực...</div>
-        <div style="margin-top:10px"><a id="deviceLink" href="https://github.com/login/device" target="_blank" style="font-size:12px">Mở trang xác thực →</a></div>
+        <div style="font-size:11px;color:var(--faint)" id="deviceStatus">Đang chờ...</div>
+        <div style="margin-top:12px"><a id="deviceLink" href="https://github.com/login/device" target="_blank" style="font-size:12px;font-weight:600">Mở trang xác thực →</a></div>
       </div>
     </div>
-
     <div id="patPanel" style="display:none">
-      <input id="patInput" type="password" placeholder="ghp_... hoặc ghu_... hoặc github_pat_...">
+      <input id="patInput" type="password" placeholder="ghp_... hoặc ghu_...">
       <button id="connectBtn">Connect với PAT →</button>
-      <div class="help">PAT classic (ghp_) hiện bị GitHub chặn 404 khi lấy Copilot token. Hãy dùng Device Flow ở trên hoặc tạo Fine-grained PAT với Copilot permission.</div>
     </div>
-
     <div id="errBox" class="err"></div>
     <div id="okBox" class="ok"></div>
     <div class="help">
-      Sau khi login, app dùng <code>/api/token</code> để lấy Copilot token và <code>/api/chat/completions</code> để chat streaming. Token chỉ lưu local.<br><br>
-      <b>Lưu ý:</b> Tài khoản phải có Copilot active tại <a href="https://github.com/settings/copilot" target="_blank">github.com/settings/copilot</a> (Free cũng được).
+      Tài khoản phải có Copilot active tại <a href="https://github.com/settings/copilot" target="_blank" style="font-weight:600">github.com/settings/copilot</a> (Free cũng được).<br>
+      Token chỉ lưu local, không gửi đi đâu khác.
     </div>
   </div>
 </div>
 
 <div class="app" id="appView" style="display:none">
   <div class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark">C</div> Copilot Chat • Simple</div>
-    <button class="new-btn" id="newBtn">+ New chat</button>
-    <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.3-4.3"/></svg><input id="searchInput" placeholder="Search..."></div>
+    <div class="brand"><div class="brand-mark">C</div><div class="brand-text"><b>Copilot Chat</b><small>Simple Premium • SSE</small></div></div>
+    <button class="new-btn" id="newBtn">✦ New chat</button>
+    <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.3-4.3"/></svg><input id="searchInput" placeholder="Search conversations..."></div>
     <div class="list" id="convList"></div>
-    <div class="foot"><div id="tokenStatus">Token active</div><div id="userInfo" style="margin-top:6px;font-weight:500"></div><button id="logoutBtn" style="margin-top:8px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);font-size:11px;cursor:pointer">Logout</button></div>
+    <div class="foot">
+      <div class="status" id="tokenStatus"><span class="dot"></span><span id="tokenText">Token active</span></div>
+      <div class="user-card"><div class="avatar" id="userAvatar">GH</div><div style="flex:1;min-width:0"><div id="userName" style="font-size:13px;font-weight:600">GitHub User</div><div id="userMeta" style="font-size:11px;color:var(--faint)">Copilot • Simple</div></div><button class="icon" id="logoutBtn" style="width:28px;height:28px">↪</button></div>
+    </div>
   </div>
   <div class="main">
     <div class="top">
-      <div style="display:flex;gap:8px;align-items:center;position:relative">
-        <button id="openBtn" style="display:none;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg2)">☰</button>
-        <button class="model-btn" id="modelBtn"><span id="modelName">gpt-4o</span> ▾</button>
-        <div class="model-drop" id="modelDrop"></div>
+      <div style="display:flex;gap:10px;align-items:center;position:relative">
+        <button class="icon" id="openBtn" style="display:none">☰</button>
+        <div class="model-select">
+          <button class="model-btn" id="modelBtn"><span style="display:flex;align-items:center;gap:8px"><span id="modelIcon">✦</span><span id="modelName">gpt-4o</span></span><span style="opacity:.5">▾</span></button>
+          <div class="model-drop" id="modelDrop"></div>
+        </div>
+        <div style="font-size:10px;color:var(--faint);display:flex;align-items:center;gap:4px"><span class="dot"></span> SSE streaming</div>
       </div>
-      <div style="display:flex;gap:6px"><button class="mini" id="exportBtn">Export</button><button class="mini" id="clearBtn">Clear</button></div>
+      <div style="display:flex;gap:6px"><button class="mini" id="exportBtn">⤓ Export</button><button class="mini" id="clearBtn">⌫ Clear</button></div>
     </div>
     <div class="chat" id="chatWrap"><div class="inner" id="chatInner"></div></div>
     <div class="input-wrap">
-      <div class="box">
-        <div class="row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot..."></textarea><button class="send" id="sendBtn">↑</button></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--faint)"><span>Enter gửi • Shift+Enter xuống dòng • ⌘K new</span><span id="count">~0 tokens</span></div>
+      <div class="box" id="inputBox">
+        <div class="row"><textarea id="msgInput" rows="1" placeholder="Ask Copilot anything... (Shift+Enter for new line)"></textarea><button class="send" id="sendBtn">↑</button></div>
+        <div class="tools">
+          <div class="tools-left">
+            <button class="icon" id="attachBtn" title="Attach file">📎</button>
+            <button class="icon" id="voiceBtn" title="Voice">🎙</button>
+            <span style="font-size:11px;color:var(--faint)" id="count">~0 tokens</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="font-size:10px;color:var(--faint);background:var(--bg2);padding:3px 8px;border-radius:20px;border:1px solid var(--border)">⌘K new</span>
+            <button class="icon" id="stopBtn" style="display:none;background:#ef4444;color:white;border-color:#ef4444">■</button>
+          </div>
+        </div>
       </div>
+      <div class="hint">Simple premium • Direct Copilot API • SSE • Markdown • Code highlight • Auto fallback for unsupported models</div>
     </div>
   </div>
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple',oauth:'copilot_oauth_token'};
-let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',abort:null,streaming:false};
-const MODELS=['gpt-4o','gpt-4o-mini','gpt-4.1','o1','o3-mini','claude-3.5-sonnet','claude-3.7-sonnet','gemini-2.0-flash-001'];
-const PROMPTS=[{t:'Giải thích code',p:'Giải thích đoạn code này:'},{t:'Fix bug',p:'Tìm và fix bug:'},{t:'Viết test',p:'Viết unit test cho:'},{t:'Refactor',p:'Refactor code này:'}];
+const LS={pat:'copilot_pat_simple',token:'copilot_token_simple',expiry:'copilot_expiry_simple',conv:'copilot_conv_simple',cur:'copilot_cur_simple',model:'copilot_model_simple',oauth:'copilot_oauth_token',models:'copilot_models_cache'};
+let state={pat:localStorage.getItem(LS.pat)||'',oauth:localStorage.getItem(LS.oauth)||'',copilotToken:localStorage.getItem(LS.token)||'',expiry:parseInt(localStorage.getItem(LS.expiry)||'0'),convs:JSON.parse(localStorage.getItem(LS.conv)||'[]'),curId:localStorage.getItem(LS.cur)||null,model:localStorage.getItem(LS.model)||'gpt-4o',models:[],abort:null,streaming:false};
+const DEFAULT_MODELS=[
+  {id:'gpt-4o', name:'GPT-4o', desc:'Best overall • 128k', icon:'✦', badge:'RECOMMENDED'},
+  {id:'gpt-4o-mini', name:'GPT-4o mini', desc:'Fast & cheap', icon:'⚡', badge:'FAST'},
+  {id:'gpt-4.1', name:'GPT-4.1', desc:'Newest • Coding king', icon:'◐', badge:'NEW'},
+  {id:'o1', name:'o1', desc:'Deep reasoning', icon:'🧠', badge:'REASON'},
+  {id:'o3-mini', name:'o3-mini', desc:'Fast reasoning', icon:'💭', badge:'THINK'},
+  {id:'claude-3.5-sonnet', name:'Claude 3.5 Sonnet', desc:'Anthropic • Best code', icon:'♣', badge:'CLAUDE'},
+  {id:'claude-3.7-sonnet', name:'Claude 3.7 Sonnet', desc:'Latest Claude • 200k', icon:'♠', badge:'NEW'},
+  {id:'gemini-2.0-flash-001', name:'Gemini 2.0 Flash', desc:'Google • 1M context', icon:'✧', badge:'GOOGLE'},
+];
+const PROMPTS=[{t:'Giải thích code',d:'Giải thích chi tiết logic',p:'Giải thích chi tiết đoạn code này:'},{t:'Fix bug',d:'Tìm và sửa lỗi',p:'Tìm bug và fix:'},{t:'Viết test',d:'Tạo unit test',p:'Viết unit test coverage cao cho:'},{t:'Refactor',d:'Clean & optimize',p:'Refactor code này cho sạch và tối ưu:'}];
 const $=s=>document.querySelector(s);
-const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),searchInput=$('#searchInput'),tokenStatus=$('#tokenStatus'),userInfo=$('#userInfo'),sidebar=$('#sidebar'),openBtn=$('#openBtn'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel');
+const patInput=$('#patInput'),connectBtn=$('#connectBtn'),errBox=$('#errBox'),okBox=$('#okBox'),loginView=$('#loginView'),appView=$('#appView'),convList=$('#convList'),chatWrap=$('#chatWrap'),chatInner=$('#chatInner'),msgInput=$('#msgInput'),sendBtn=$('#sendBtn'),newBtn=$('#newBtn'),modelBtn=$('#modelBtn'),modelDrop=$('#modelDrop'),modelName=$('#modelName'),modelIcon=$('#modelIcon'),searchInput=$('#searchInput'),tokenText=$('#tokenText'),userAvatar=$('#userAvatar'),userName=$('#userName'),userMeta=$('#userMeta'),sidebar=$('#sidebar'),openBtn=$('#openBtn'),deviceBtn=$('#deviceBtn'),deviceBox=$('#deviceBox'),deviceCode=$('#deviceCode'),deviceStatus=$('#deviceStatus'),deviceLink=$('#deviceLink'),tabDevice=$('#tabDevice'),tabPat=$('#tabPat'),devicePanel=$('#devicePanel'),patPanel=$('#patPanel'),toast=$('#toast'),countEl=$('#count');
 
+function showToast(msg){ toast.textContent=msg; toast.style.display='block'; setTimeout(()=>toast.style.display='none',3000); }
 function init(){
   if(state.pat) patInput.value=state.pat;
+  state.models=JSON.parse(localStorage.getItem(LS.models)||'null')||DEFAULT_MODELS;
   renderModels(); renderList();
   if(state.oauth||state.pat){ doLoginWithToken(state.oauth||state.pat, true); }
   checkMobile(); window.addEventListener('resize',checkMobile);
 }
-function checkMobile(){const m=innerWidth<=800; openBtn.style.display=m?'block':'none'; if(!m) sidebar.classList.remove('open');}
+function checkMobile(){const m=innerWidth<=800; openBtn.style.display=m?'grid':'none'; if(!m) sidebar.classList.remove('open');}
 init();
 
 tabDevice.onclick=()=>{ tabDevice.classList.add('active'); tabPat.classList.remove('active'); devicePanel.style.display='block'; patPanel.style.display='none'; };
@@ -171,114 +243,101 @@ tabPat.onclick=()=>{ tabPat.classList.add('active'); tabDevice.classList.remove(
 
 function getApi(){
   const host=location.hostname;
-  if(host.includes('workers.dev')||host.includes('pages.dev')||location.pathname.startsWith('/api/')){
-    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions',deviceCode:'/api/device/code',deviceToken:'/api/device/token'};
+  if(host.includes('workers.dev')||host.includes('pages.dev')){
+    return {token:'/api/token',user:'/api/user',chat:'/api/chat/completions',models:'/api/models',deviceCode:'/api/device/code',deviceToken:'/api/device/token'};
   }
-  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions',deviceCode:'https://github.com/login/device/code',deviceToken:'https://github.com/login/oauth/access_token'};
+  return {token:'https://api.github.com/copilot_internal/v2/token',user:'https://api.github.com/user',chat:'https://api.githubcopilot.com/chat/completions',models:'https://api.githubcopilot.com/models',deviceCode:'https://github.com/login/device/code',deviceToken:'https://github.com/login/oauth/access_token'};
 }
 
-// Device Flow
 deviceBtn.onclick=async()=>{
   errBox.style.display='none'; okBox.style.display='none';
   deviceBtn.textContent='Đang lấy code...'; deviceBtn.disabled=true;
   try{
     const api=getApi();
-    // Step 1: Get device code
-    const res=await fetch(api.deviceCode, {
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
-      body: new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', scope:'read:user copilot'}).toString()
-    });
+    const res=await fetch(api.deviceCode, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},body:new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', scope:'read:user copilot'}).toString()});
     const data=await res.json();
     if(!data.device_code) throw new Error(JSON.stringify(data));
-    
-    deviceCode.textContent=data.user_code;
-    deviceBox.style.display='block';
-    deviceLink.href=data.verification_uri;
-    deviceStatus.textContent=`Mở ${data.verification_uri} và nhập code trên. Đang chờ... (${data.expires_in}s)`;
-    okBox.textContent=`Đã tạo code: ${data.user_code}\nMở ${data.verification_uri} để xác thực.`; okBox.style.display='block';
-    
-    // Step 2: Poll for token
-    const interval=(data.interval||5)*1000;
-    const expiresAt=Date.now()+data.expires_in*1000;
-    let attempts=0;
+    deviceCode.textContent=data.user_code; deviceBox.style.display='block'; deviceLink.href=data.verification_uri;
+    deviceStatus.textContent=`Mở ${data.verification_uri} và nhập code. Đang chờ...`;
+    okBox.textContent=`Code: ${data.user_code} - Mở ${data.verification_uri}`; okBox.style.display='block';
+    const interval=(data.interval||5)*1000; const expiresAt=Date.now()+data.expires_in*1000;
     const poll=async()=>{
-      if(Date.now()>expiresAt){ deviceStatus.textContent='Hết hạn, bấm lại để tạo code mới.'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return; }
-      attempts++;
-      deviceStatus.textContent=`Đang chờ xác thực... (lần ${attempts}) - Mở ${data.verification_uri} nhập ${data.user_code}`;
+      if(Date.now()>expiresAt){ deviceStatus.textContent='Hết hạn, tạo lại code mới.'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return; }
+      deviceStatus.textContent=`Đang chờ xác thực tại ${data.verification_uri}...`;
       try{
-        const tokenRes=await fetch(api.deviceToken, {
-          method:'POST',
-          headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
-          body: new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', device_code:data.device_code, grant_type:'urn:ietf:params:oauth:grant-type:device_code'}).toString()
-        });
+        const tokenRes=await fetch(api.deviceToken, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},body:new URLSearchParams({client_id:'Iv1.b507a08c87ecfe98', device_code:data.device_code, grant_type:'urn:ietf:params:oauth:grant-type:device_code'}).toString()});
         const tokenData=await tokenRes.json();
         if(tokenData.access_token){
           deviceStatus.textContent='Đã xác thực! Đang lấy Copilot token...';
-          // Save oauth token and try to get copilot token
-          state.oauth=tokenData.access_token;
-          localStorage.setItem(LS.oauth, tokenData.access_token);
+          state.oauth=tokenData.access_token; localStorage.setItem(LS.oauth, tokenData.access_token);
           await doLoginWithToken(tokenData.access_token, false);
-          deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false;
-          return;
-        } else if(tokenData.error==='authorization_pending'){
-          // continue polling
-          setTimeout(poll, interval);
-        } else if(tokenData.error==='slow_down'){
-          setTimeout(poll, interval+5000);
-        } else if(tokenData.error){
-          throw new Error(tokenData.error_description||tokenData.error);
-        } else {
-          setTimeout(poll, interval);
-        }
-      }catch(e){
-        errBox.textContent='Lỗi poll token: '+e.message; errBox.style.display='block';
-        setTimeout(poll, interval);
-      }
+          deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; return;
+        } else if(tokenData.error==='authorization_pending'){ setTimeout(poll, interval); }
+        else if(tokenData.error==='slow_down'){ setTimeout(poll, interval+5000); }
+        else if(tokenData.error){ throw new Error(tokenData.error_description||tokenData.error); }
+        else setTimeout(poll, interval);
+      }catch(e){ errBox.textContent='Lỗi: '+e.message; errBox.style.display='block'; setTimeout(poll, interval); }
     };
     setTimeout(poll, interval);
-  }catch(e){
-    errBox.textContent='Lỗi device flow: '+e.message; errBox.style.display='block';
-    deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false;
-  }
+  }catch(e){ errBox.textContent='Lỗi device flow: '+e.message; errBox.style.display='block'; deviceBtn.textContent='Bắt đầu Device Flow →'; deviceBtn.disabled=false; }
 };
+
+async function fetchModels(githubToken){
+  try{
+    const api=getApi();
+    const res=await fetch(api.models, {headers:{Authorization:`Bearer ${githubToken}`}});
+    if(res.ok){
+      const data=await res.json();
+      let models=[];
+      if(data.data) models=data.data;
+      else if(Array.isArray(data)) models=data;
+      if(models.length>0){
+        // Normalize
+        state.models=models.map(m=>({
+          id:m.id||m.model||m.name,
+          name:m.name||m.id,
+          desc:m.description||m.capabilities?Object.keys(m.capabilities||{}).join(', '):'Copilot model',
+          icon:m.id?.includes('claude')?'♣':m.id?.includes('gemini')?'✧':m.id?.includes('o1')||m.id?.includes('o3')?'🧠':'✦',
+          badge:m.id?.includes('gpt-4o')?'RECOMMENDED':m.id?.includes('claude')?'CLAUDE':'',
+          raw:m
+        }));
+        localStorage.setItem(LS.models, JSON.stringify(state.models));
+        renderModels();
+        showToast(`Đã tải ${state.models.length} models từ Copilot API`);
+        return;
+      }
+    }
+  }catch(e){ console.log('fetch models fail', e); }
+  // fallback to default
+  state.models=DEFAULT_MODELS;
+  renderModels();
+}
 
 async function doLoginWithToken(githubToken, silent){
   const api=getApi();
   if(!silent){ connectBtn.textContent='...'; connectBtn.disabled=true; errBox.style.display='none'; okBox.style.display='none'; }
   try{
-    // Try to get copilot token using github token (ghu_ or pat)
     const r=await fetch(api.token,{headers:{Authorization:`token ${githubToken}`}});
-    const text=await r.text();
-    let d;
-    try{ d=JSON.parse(text); }catch{ throw new Error(text.slice(0,500)); }
-    if(!r.ok){
-      const errMsg=d.error||d.message||text;
-      throw new Error(`${r.status}: ${typeof errMsg==='string'?errMsg:JSON.stringify(errMsg).slice(0,500)}`);
-    }
-    if(!d.token) throw new Error('Không có token trong response: '+text.slice(0,300));
-    
+    const text=await r.text(); let d; try{ d=JSON.parse(text); }catch{ throw new Error(text.slice(0,500)); }
+    if(!r.ok) throw new Error(`${r.status}: ${d.error||d.message||text.slice(0,300)}`);
+    if(!d.token) throw new Error('No token in response');
     state.copilotToken=d.token; state.expiry=d.expires_at?d.expires_at*1000:Date.now()+25*60*1000;
-    // Save github token as pat for reuse
-    if(githubToken.startsWith('ghu_')||githubToken.startsWith('gho_')){
-      state.oauth=githubToken; localStorage.setItem(LS.oauth, githubToken);
-    } else {
-      state.pat=githubToken; localStorage.setItem(LS.pat, githubToken);
-    }
+    if(githubToken.startsWith('ghu_')||githubToken.startsWith('gho_')){ state.oauth=githubToken; localStorage.setItem(LS.oauth, githubToken); }
+    else { state.pat=githubToken; localStorage.setItem(LS.pat, githubToken); }
     localStorage.setItem(LS.token,d.token); localStorage.setItem(LS.expiry,String(state.expiry));
-    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userInfo.textContent=`@${ud.login} • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`; } }catch{}
+    try{ const u=await fetch(api.user,{headers:{Authorization:`token ${githubToken}`}}); if(u.ok){ const ud=await u.json(); userName.textContent=ud.name||ud.login; userMeta.textContent=`@${ud.login} • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`; if(ud.avatar_url) userAvatar.innerHTML=`<img src="${ud.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`; } }catch{}
     loginView.style.display='none'; appView.style.display='flex';
-    tokenStatus.textContent=`Token active • ${Math.floor((state.expiry-Date.now())/60000)}m • ${githubToken.startsWith('ghu_')?'OAuth Device Flow':'PAT'}`;
+    tokenText.textContent=`Token • ${Math.floor((state.expiry-Date.now())/60000)}m • ${githubToken.startsWith('ghu_')?'OAuth':'PAT'}`;
     if(state.convs.length===0) newChat(); renderList(); renderChat();
-    setInterval(()=>{ tokenStatus.textContent=`Token active • ${Math.max(0,Math.floor((state.expiry-Date.now())/60000))}m`; },10000);
-    okBox.textContent='Đã kết nối thành công!'; okBox.style.display='block';
+    // Fetch available models
+    fetchModels(d.token);
+    setInterval(()=>{ tokenText.textContent=`Token • ${Math.max(0,Math.floor((state.expiry-Date.now())/60000))}m`; },10000);
   }catch(e){
     if(!silent){ errBox.textContent='Token fail: '+e.message; errBox.style.display='block'; }
     console.error(e);
   }
   finally{ if(!silent){ connectBtn.textContent='Connect với PAT →'; connectBtn.disabled=false; } }
 }
-
 connectBtn.onclick=()=>{ const pat=patInput.value.trim(); if(!pat){ errBox.textContent='Nhập PAT'; errBox.style.display='block'; return; } doLoginWithToken(pat,false); };
 patInput.onkeydown=e=>{ if(e.key==='Enter') connectBtn.click(); };
 
@@ -290,7 +349,7 @@ function renderList(){
   convList.innerHTML='';
   state.convs.filter(c=>!q||c.title.toLowerCase().includes(q)).forEach(c=>{
     const d=document.createElement('div'); d.className='item'+(c.id===state.curId?' active':'');
-    d.innerHTML=`<div>${esc(c.title)}</div><div class="meta">${c.msgs.length} msgs • ${c.model}</div>`;
+    d.innerHTML=`<div class="title">${esc(c.title)}</div><div class="meta"><span>${c.msgs.length} msgs</span><span>•</span><span>${c.model}</span></div>`;
     d.onclick=()=>{ state.curId=c.id; save(); renderList(); renderChat(); if(innerWidth<=800) sidebar.classList.remove('open'); };
     convList.appendChild(d);
   });
@@ -301,54 +360,88 @@ openBtn.onclick=()=>sidebar.classList.add('open');
 
 function renderModels(){
   modelDrop.innerHTML='';
-  MODELS.forEach(m=>{
-    const d=document.createElement('div'); d.className='mopt'+(m===state.model?' active':''); d.textContent=m;
-    d.onclick=()=>{ state.model=m; localStorage.setItem(LS.model,m); modelName.textContent=m; const cc=cur(); if(cc){ cc.model=m; save(); } modelDrop.classList.remove('open'); renderList(); };
+  state.models.forEach(m=>{
+    const d=document.createElement('div'); d.className='mopt'+(m.id===state.model?' active':'');
+    const badgeClass=m.badge==='RECOMMENDED'?'ok':m.badge?'warn':'';
+    d.innerHTML=`<div><div class="name"><span style="width:24px;height:24px;border-radius:6px;background:var(--text);color:var(--bg);display:grid;place-items:center;font-size:11px">${m.icon||'✦'}</span> ${esc(m.name||m.id)}</div><div class="desc">${esc(m.desc||m.id)}</div></div><span class="badge ${badgeClass}">${m.badge||''}</span>`;
+    d.onclick=()=>{ state.model=m.id; localStorage.setItem(LS.model,m.id); modelName.textContent=m.name||m.id; modelIcon.textContent=m.icon||'✦'; const cc=cur(); if(cc){ cc.model=m.id; save(); } modelDrop.classList.remove('open'); renderList(); showToast(`Đã chọn ${m.name||m.id}`); };
     modelDrop.appendChild(d);
   });
-  modelName.textContent=state.model;
+  const curM=state.models.find(x=>x.id===state.model)||state.models[0];
+  if(curM){ modelName.textContent=curM.name||curM.id; modelIcon.textContent=curM.icon||'✦'; }
 }
 modelBtn.onclick=()=>modelDrop.classList.toggle('open');
-document.addEventListener('click',e=>{ if(!e.target.closest('#modelBtn')&&!e.target.closest('#modelDrop')) modelDrop.classList.remove('open'); });
+document.addEventListener('click',e=>{ if(!e.target.closest('.model-select')) modelDrop.classList.remove('open'); });
 
 function renderChat(){
   const c=cur();
-  if(!c){ chatInner.innerHTML=`<div class="empty"><h1>Copilot Chat - Simple</h1><p>Login bằng OAuth Device Flow (giống VS Code) để dùng Copilot API trực tiếp với SSE streaming. PAT (ghp_) đã bị GitHub chặn 404.</p><div class="grid">${PROMPTS.map(p=>`<button class="card" data-p="${esc(p.p)}"><b>${p.t}</b>${p.p}</button>`).join('')}</div></div>`; chatInner.querySelectorAll('.card').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); }); return; }
+  if(!c){ chatInner.innerHTML=`<div class="empty"><div class="empty-icon">C</div><h1>Copilot Chat — Simple Premium</h1><p>Direct Copilot API • SSE streaming • Auto fallback cho model không hỗ trợ. Chọn model ở trên, model nào không hỗ trợ sẽ tự fallback sang gpt-4o.</p><div class="grid">${PROMPTS.map(p=>`<button class="card" data-p="${esc(p.p)}"><b>${esc(p.t)}</b><span>${esc(p.d)}</span></button>`).join('')}</div></div>`; chatInner.querySelectorAll('.card').forEach(b=>b.onclick=()=>{ msgInput.value=b.dataset.p+' '; msgInput.focus(); updateCount(); }); return; }
   chatInner.innerHTML='';
   c.msgs.forEach((m,i)=>{
     const div=document.createElement('div'); div.className='msg';
-    div.innerHTML=`<div class="avatar ${m.role==='user'?'user':'ai'}">${m.role==='user'?'U':'C'}</div><div class="body"><div class="role">${m.role}</div><div class="content">${md(m.content)}</div><div class="actions"><button class="mini" onclick="navigator.clipboard.writeText(${JSON.stringify(m.content).replace(/"/g,'&quot;')})">Copy</button></div></div>`;
+    div.innerHTML=`<div class="msg-avatar ${m.role==='user'?'user':'ai'}">${m.role==='user'?'U':'C'}</div><div class="msg-body"><div class="msg-role">${m.role} • ${new Date(m.at||Date.now()).toLocaleTimeString()}${m.modelUsed?` • used ${m.modelUsed}`:''}</div><div class="msg-content">${md(m.content)}</div><div class="msg-actions"><button class="mini" data-copy>⎙ Copy</button><button class="mini" data-edit>✎ Edit</button></div></div>`;
+    div.querySelectorAll('pre').forEach(pre=>{
+      const code=pre.querySelector('code'); const lang=(code?.className.match(/language-(\w+)/)||[])[1]||'code';
+      const head=document.createElement('div'); head.className='code-head'; head.innerHTML=`<span>${lang}</span><button>Copy</button>`;
+      pre.prepend(head); head.querySelector('button').onclick=()=>{ navigator.clipboard.writeText(code.textContent); showToast('Copied!'); };
+    });
+    div.querySelector('[data-copy]').onclick=()=>{ navigator.clipboard.writeText(m.content); showToast('Copied!'); };
+    div.querySelector('[data-edit]').onclick=()=>{ if(m.role==='user'){ msgInput.value=m.content; msgInput.focus(); } };
     chatInner.appendChild(div);
   });
-  if(state.streaming){ const d=document.createElement('div'); d.className='msg'; d.innerHTML=`<div class="avatar ai">C</div><div class="body"><div class="role">assistant • thinking...</div><div class="content">● ● ●</div></div>`; chatInner.appendChild(d); }
+  if(state.streaming){ const d=document.createElement('div'); d.className='msg'; d.innerHTML=`<div class="msg-avatar ai">C</div><div class="msg-body"><div class="msg-role">assistant • thinking...</div><div class="thinking"><span></span><span></span><span></span></div></div>`; chatInner.appendChild(d); }
   chatWrap.scrollTop=chatWrap.scrollHeight;
   if(window.hljs) document.querySelectorAll('pre code').forEach(b=>{ try{ hljs.highlightElement(b);}catch{} });
 }
 function md(t){ try{ return marked.parse(t||''); }catch{ return esc(t).replace(/\n/g,'<br>'); } }
 function esc(s){ return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
+function updateCount(){ const l=msgInput.value.length; countEl.textContent=`~${Math.ceil(l/4)} tokens • ${l} chars`; }
 async function send(){
   const text=msgInput.value.trim(); if(!text||state.streaming) return;
   let c=cur(); if(!c){ newChat(); c=cur(); }
-  c.msgs.push({role:'user',content:text}); if(c.msgs.length===1) c.title=text.slice(0,50);
-  msgInput.value=''; save(); renderList(); renderChat();
+  c.msgs.push({role:'user',content:text,at:Date.now()}); if(c.msgs.length===1) c.title=text.slice(0,50);
+  msgInput.value=''; updateCount(); autoResize(); save(); renderList(); renderChat();
   state.streaming=true; renderChat();
-  const assistant={role:'assistant',content:''}; c.msgs.push(assistant);
-  const ctrl=new AbortController(); state.abort=ctrl; let full='';
+  const assistant={role:'assistant',content:'',at:Date.now()}; c.msgs.push(assistant);
+  const ctrl=new AbortController(); state.abort=ctrl; let full=''; let modelUsed=null;
   try{
     const api=getApi();
-    const msgs=[{role:'system',content:'You are GitHub Copilot Chat. Helpful, concise, expert coding assistant. Use Vietnamese when user speaks Vietnamese.'}, ...c.msgs.slice(0,-1).slice(-15).map(m=>({role:m.role,content:m.content}))];
-    const r=await fetch(api.chat,{method:'POST',headers:{'Authorization':`Bearer ${state.copilotToken}`,'Content-Type':'application/json','Editor-Version':'vscode/1.99.0','Editor-Plugin-Version':'copilot-chat/0.26.7','Copilot-Integration-Id':'vscode-chat'},body:JSON.stringify({model:c.model||state.model,messages:msgs,stream:true,temperature:0.7}),signal:ctrl.signal});
-    if(!r.ok){ const t=await r.text(); throw new Error(t.slice(0,500)); }
+    const msgs=[{role:'system',content:'You are GitHub Copilot Chat - Simple Premium. Helpful, concise, expert coding assistant. Use Vietnamese when user speaks Vietnamese. Always use markdown, code blocks with language.'}, ...c.msgs.slice(0,-1).slice(-20).map(m=>({role:m.role,content:m.content}))];
+    const r=await fetch(api.chat,{method:'POST',headers:{'Authorization':`Bearer ${state.copilotToken}`,'Content-Type':'application/json','Editor-Version':'vscode/1.99.3','Editor-Plugin-Version':'copilot-chat/0.26.7','Copilot-Integration-Id':'vscode-chat'},body:JSON.stringify({model:c.model||state.model,messages:msgs,stream:true,temperature:0.7}),signal:ctrl.signal});
+    if(!r.ok){
+      const t=await r.text();
+      let errMsg=t;
+      try{ const j=JSON.parse(t); errMsg=j.error?.message||j.error||t; }catch{}
+      // Check if model_not_supported
+      if(t.includes('model_not_supported')||t.includes('not supported')){
+        throw new Error(`Model ${c.model} không được hỗ trợ cho tài khoản của bạn. Worker đã thử fallback sang gpt-4o nhưng vẫn lỗi. Hãy chọn gpt-4o hoặc gpt-4o-mini. Chi tiết: ${errMsg}`);
+      }
+      throw new Error(errMsg.slice(0,600));
+    }
+    modelUsed=r.headers.get('X-Model-Used')||c.model;
+    if(modelUsed!==c.model){ showToast(`Model ${c.model} không hỗ trợ, đã fallback sang ${modelUsed}`); assistant.modelUsed=modelUsed; }
     const reader=r.body.getReader(); const dec=new TextDecoder(); let buf='';
-    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.msg:last-child .content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
-  }catch(e){ if(e.name!=='AbortError') assistant.content=full+`\n\nError: ${esc(e.message)}`; }
+    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const line of lines){ if(!line.startsWith('data: ')) continue; const d=line.slice(6).trim(); if(d==='[DONE]') break; try{ const j=JSON.parse(d); const piece=j.choices?.[0]?.delta?.content||''; if(piece){ full+=piece; assistant.content=full; const last=chatInner.querySelector('.msg:last-child .msg-content'); if(last) last.innerHTML=md(full); chatWrap.scrollTop=chatWrap.scrollHeight; } }catch{} } }
+  }catch(e){
+    if(e.name!=='AbortError'){
+      assistant.content=full+`\n\n> ⚠️ **Lỗi:** ${esc(e.message)}\n\n> 💡 **Gợi ý:** Nếu lỗi model_not_supported, hãy bấm chọn model **gpt-4o** hoặc **gpt-4o-mini** ở trên - 2 model này luôn hoạt động với mọi tài khoản Copilot Free/Pro.`;
+      if(e.message.includes('model_not_supported')||e.message.includes('không được hỗ trợ')){
+        // Auto switch to gpt-4o for next time
+        setTimeout(()=>{ showToast('Đã tự chuyển sang gpt-4o cho lần chat sau'); state.model='gpt-4o'; localStorage.setItem(LS.model,'gpt-4o'); renderModels(); }, 1000);
+      }
+    }
+  }
   finally{ state.streaming=false; state.abort=null; save(); renderChat(); }
 }
+function autoResize(){ msgInput.style.height='auto'; msgInput.style.height=Math.min(msgInput.scrollHeight,160)+'px'; }
+msgInput.addEventListener('input',()=>{ autoResize(); updateCount(); });
 msgInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } });
-sendBtn.onclick=send;
-$('#clearBtn').onclick=()=>{ const c=cur(); if(c&&confirm('Clear?')){ c.msgs=[]; save(); renderChat(); } };
-$('#exportBtn').onclick=()=>{ const c=cur(); if(!c) return; const md=`# ${c.title}\n\n`+c.msgs.map(m=>`## ${m.role}\n\n${m.content}\n`).join('\n'); const blob=new Blob([md],{type:'text/markdown'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=c.id+'.md'; a.click(); URL.revokeObjectURL(url); };
+$('#sendBtn').onclick=send;
+$('#stopBtn').onclick=()=>{ if(state.abort) state.abort.abort(); };
+$('#attachBtn').onclick=()=>{ const input=document.createElement('input'); input.type='file'; input.accept='.txt,.md,.js,.ts,.py,.json,.html,.css'; input.onchange=async()=>{ const f=input.files[0]; if(!f) return; const t=await f.text(); msgInput.value+=`\n\n\`\`\`${f.name.split('.').pop()}\n// ${f.name}\n${t.slice(0,12000)}\n\`\`\`\n`; autoResize(); updateCount(); }; input.click(); };
+$('#voiceBtn').onclick=()=>{ if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){ showToast('Browser không hỗ trợ voice'); return; } const SR=window.SpeechRecognition||window.webkitSpeechRecognition; const rec=new SR(); rec.lang='vi-VN'; rec.onresult=e=>{ msgInput.value+=e.results[0][0].transcript; autoResize(); updateCount(); }; rec.start(); showToast('Đang nghe...'); };
+$('#clearBtn').onclick=()=>{ const c=cur(); if(c&&confirm('Clear chat?')){ c.msgs=[]; save(); renderChat(); } };
+$('#exportBtn').onclick=()=>{ const c=cur(); if(!c) return; const md=`# ${c.title}\n\nModel: ${c.model}\n\n`+c.msgs.map(m=>`## ${m.role}\n\n${m.content}\n`).join('\n---\n\n'); const blob=new Blob([md],{type:'text/markdown'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=c.id+'.md'; a.click(); URL.revokeObjectURL(url); };
 $('#logoutBtn').onclick=()=>{ if(confirm('Logout?')){ localStorage.clear(); location.reload(); } };
 document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); newChat(); } });
 </script>
